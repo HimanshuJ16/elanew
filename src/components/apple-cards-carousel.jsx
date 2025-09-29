@@ -1,5 +1,3 @@
-"use client";
-
 import React, {
   useEffect,
   useRef,
@@ -17,23 +15,27 @@ export const CarouselContext = createContext({
 export const Carousel = ({
   items,
   initialScroll = 0,
+  speed = 2, // Speed multiplier for animation (1 = normal, 2 = double speed, 0.5 = half speed)
 }) => {
   const carouselRef = React.useRef(null);
+  const containerRef = React.useRef(null);
+  const animationRef = React.useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const translateXRef = useRef(0);
   const cardWidth = 300;
-  const lastScrollTimeRef = useRef(0);
-  const scrollCooldownRef = useRef(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const gap = 16;
+  const totalItemWidth = cardWidth + gap;
 
   // Create infinite items by duplicating the array multiple times
   const infiniteItems = React.useMemo(() => {
-    const multiplier = Math.max(3, Math.ceil(2000 / (cardWidth * items.length)));
+    const multiplier = Math.max(6, Math.ceil(3000 / (totalItemWidth * items.length)));
     const repeatedItems = [];
     for (let i = 0; i < multiplier; i++) {
       repeatedItems.push(...items);
     }
     return repeatedItems;
-  }, [items, cardWidth]);
+  }, [items, totalItemWidth]);
 
   // Enhanced animation variants for the carousel container
   const containerVariants = {
@@ -72,155 +74,68 @@ export const Carousel = ({
     }
   };
 
-  // Smooth throttle function
-  const throttle = (func, delay) => {
-    return (...args) => {
-      if (!scrollCooldownRef.current) {
-        func.apply(null, args);
-        scrollCooldownRef.current = true;
-        setTimeout(() => {
-          scrollCooldownRef.current = false;
-        }, delay);
+  // Smooth continuous animation using requestAnimationFrame
+  const animate = () => {
+    if (!isPaused && containerRef.current) {
+      translateXRef.current -= speed * 0.5; // Adjust speed here
+      
+      // Reset position for seamless infinite loop
+      const resetPoint = -(items.length * totalItemWidth);
+      if (translateXRef.current <= resetPoint) {
+        translateXRef.current = 0;
+      }
+      
+      containerRef.current.style.transform = `translateX(${translateXRef.current}px)`;
+      
+      // Update current index based on position
+      const newIndex = Math.floor(Math.abs(translateXRef.current) / totalItemWidth) % items.length;
+      setCurrentIndex(newIndex);
+    }
+    
+    animationRef.current = requestAnimationFrame(animate);
+  };
+
+  // Start animation
+  useEffect(() => {
+    animationRef.current = requestAnimationFrame(animate);
+    
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
-  };
+  }, [isPaused, speed]);
 
-  // Enhanced navigation functions with smooth infinite scrolling
-  const scrollToNext = () => {
-    if (carouselRef.current && !isTransitioning) {
-      setIsTransitioning(true);
-      const nextIndex = currentIndex + 1;
-      const nextScrollPosition = nextIndex * cardWidth;
-      
-      carouselRef.current.scrollTo({
-        left: nextScrollPosition,
-        behavior: "smooth",
-      });
-      
-      setCurrentIndex(nextIndex);
-      
-      setTimeout(() => {
-        setIsTransitioning(false);
-        // Reset position if we've scrolled too far
-        if (nextIndex >= infiniteItems.length - items.length) {
-          const resetPosition = items.length * cardWidth;
-          carouselRef.current.scrollTo({
-            left: resetPosition,
-            behavior: "auto",
-          });
-          setCurrentIndex(items.length);
-        }
-      }, 300);
-    }
-  };
-
-  const scrollToPrevious = () => {
-    if (carouselRef.current && !isTransitioning) {
-      setIsTransitioning(true);
-      const prevIndex = currentIndex - 1;
-      const prevScrollPosition = prevIndex * cardWidth;
-      
-      // Handle infinite scroll backwards
-      if (currentIndex <= 0) {
-        const jumpPosition = (infiniteItems.length - items.length * 2) * cardWidth;
-        carouselRef.current.scrollTo({
-          left: jumpPosition,
-          behavior: "auto",
-        });
-        setCurrentIndex(infiniteItems.length - items.length * 2);
-        
-        setTimeout(() => {
-          const targetPosition = jumpPosition - cardWidth;
-          carouselRef.current.scrollTo({
-            left: targetPosition,
-            behavior: "smooth",
-          });
-          setCurrentIndex(infiniteItems.length - items.length * 2 - 1);
-          setIsTransitioning(false);
-        }, 50);
-      } else {
-        carouselRef.current.scrollTo({
-          left: prevScrollPosition,
-          behavior: "smooth",
-        });
-        setCurrentIndex(prevIndex);
-        setTimeout(() => setIsTransitioning(false), 300);
-      }
-    }
-  };
-
-  // Enhanced wheel event handler with momentum
-  const handleWheel = throttle((event) => {
-    event.preventDefault();
-    
-    const now = Date.now();
-    const timeDiff = now - lastScrollTimeRef.current;
-    
-    if (timeDiff > 100 && !isTransitioning) {
-      const intensity = Math.abs(event.deltaY);
-      const threshold = 50;
-      
-      if (intensity > threshold) {
-        if (event.deltaY > 0) {
-          scrollToNext();
-        } else if (event.deltaY < 0) {
-          scrollToPrevious();
-        }
-        lastScrollTimeRef.current = now;
-      }
-    }
-  }, 100);
-
-  // Initialize with proper starting position for infinite scroll
+  // Initialize starting position
   useEffect(() => {
-    if (carouselRef.current && infiniteItems.length > 0) {
-      const startPosition = items.length * cardWidth + initialScroll;
-      carouselRef.current.scrollLeft = startPosition;
-      setCurrentIndex(items.length);
+    if (containerRef.current && infiniteItems.length > 0) {
+      // Start from the middle of the infinite array for seamless looping
+      const startPosition = -(items.length * totalItemWidth) + initialScroll;
+      translateXRef.current = startPosition;
+      containerRef.current.style.transform = `translateX(${startPosition}px)`;
     }
-  }, [initialScroll, items.length, infiniteItems.length]);
+  }, [initialScroll, items.length, infiniteItems.length, totalItemWidth]);
 
-  // Enhanced scroll handler with infinite loop detection
-  const handleScroll = () => {
-    if (carouselRef.current && !isTransitioning) {
-      const { scrollLeft } = carouselRef.current;
-      const newIndex = Math.round(scrollLeft / cardWidth);
-      setCurrentIndex(newIndex);
-      
-      // Auto-reset position for seamless infinite scrolling
-      if (newIndex >= infiniteItems.length - items.length) {
-        setTimeout(() => {
-          const resetPosition = items.length * cardWidth;
-          carouselRef.current.scrollTo({
-            left: resetPosition,
-            behavior: "auto",
-          });
-          setCurrentIndex(items.length);
-        }, 100);
-      } else if (newIndex < items.length) {
-        setTimeout(() => {
-          const resetPosition = (infiniteItems.length - items.length * 2) * cardWidth;
-          carouselRef.current.scrollTo({
-            left: resetPosition,
-            behavior: "auto",
-          });
-          setCurrentIndex(infiniteItems.length - items.length * 2);
-        }, 100);
-      }
-    }
+  // Handle mouse enter/leave for pausing animation
+  const handleMouseEnter = () => {
+    setIsPaused(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
   };
 
   const memoizedValue = React.useMemo(
     () => ({
-      currentIndex: currentIndex % items.length,
+      currentIndex: currentIndex,
     }),
-    [currentIndex, items.length]
+    [currentIndex]
   );
 
   return (
     <CarouselContext.Provider value={memoizedValue}>
       <motion.div 
-        className="relative w-full"
+        className="relative w-full overflow-hidden"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -229,20 +144,15 @@ export const Carousel = ({
           amount: 0.2,
           margin: "-50px"
         }}
-        onWheel={handleWheel}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         style={{ cursor: 'grab' }}
       >
         <div
-          className={cn(
-            "flex w-full overflow-x-scroll overscroll-x-auto py-10 md:py-20 scroll-smooth [scrollbar-width:none]"
-          )}
+          className="flex w-full py-10 md:py-20"
           ref={carouselRef}
-          onScroll={handleScroll}
           style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            WebkitScrollbar: "none",
-            scrollBehavior: "smooth",
+            overflow: 'hidden',
           }}
         >
           <div
@@ -252,17 +162,22 @@ export const Carousel = ({
           ></div>
 
           <motion.div
+            ref={containerRef}
             className={cn(
-              "flex flex-row justify-start gap-4 pl-4",
+              "flex flex-row justify-start pl-4",
               "max-w-none"
             )}
             variants={containerVariants}
+            style={{
+              gap: `${gap}px`,
+              willChange: 'transform',
+            }}
           >
             <AnimatePresence mode="wait">
               {infiniteItems.map((item, index) => (
                 <motion.div
                   key={`infinite-card-${index}`}
-                  className="last:pr-[5%] md:last:pr-[33%] rounded-3xl"
+                  className="flex-shrink-0 rounded-3xl"
                   variants={cardVariants}
                   whileHover={{ 
                     scale: 1.06,
@@ -279,6 +194,9 @@ export const Carousel = ({
                   whileTap={{
                     scale: 0.98,
                     transition: { duration: 0.1 }
+                  }}
+                  style={{
+                    width: `${cardWidth}px`,
                   }}
                 >
                   {/* Clone the item with updated props for infinite scroll */}
