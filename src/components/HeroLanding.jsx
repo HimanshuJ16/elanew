@@ -76,7 +76,7 @@ function HeroLanding() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % words.length);
-    }, 3500);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -241,11 +241,11 @@ function HeroLanding() {
                       scale: 0.9,
                     }}
                     transition={{
-                      duration: 0.6,
+                      duration: 0.3,
                       ease: [0.25, 0.46, 0.45, 0.94],
                       type: "spring",
-                      stiffness: 120,
-                      damping: 12,
+                      stiffness: 150,
+                      damping: 10,
                     }}
                     className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent font-black italic"
                     style={{ transformOrigin: "center" }}
