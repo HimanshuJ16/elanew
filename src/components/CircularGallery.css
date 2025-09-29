@@ -1,0 +1,76 @@
+/* CircularGallery.css */
+.circular-gallery {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  background: transparent;
+}
+
+.video-media-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: none;
+}
+
+.video-media-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.video-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.video-title {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .video-media-container {
+    transform-origin: center center;
+  }
+  
+  .video-title {
+    font-size: 14px !important;
+    bottom: -30px;
+  }
+}
+
+/* Performance optimizations */
+.circular-gallery * {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Smooth scrolling behavior */
+.circular-gallery {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar (optional) */
+.circular-gallery::-webkit-scrollbar {
+  display: none;
+}

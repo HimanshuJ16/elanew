@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import CircularGallery from "./CircularGallery";
 import MobileVideoGrid from "./MobileVideoGrid";
+import AppleCardsCarouselDemo from "./AppleCards";
 
 const ShowCase = () => {
   return (
@@ -19,7 +20,9 @@ const ShowCase = () => {
           <MobileVideoGrid />
         </div>
         <div className="hidden lg:block" style={{ height: '600px', position: 'relative' }}>
-          <CircularGallery bend={1} textColor="#ffffff" borderRadius={0.05} scrollEase={0.02}/>
+          {/* <CircularGallery bend={1} textColor="#ffffff" borderRadius={0.05} scrollEase={0.02}/> */}
+          {/* <AppleCardsCarouselDemo /> */}
+          <AppleCardsCarouselDemo data={data} />
         </div>
       </div>
     </div>
@@ -27,3 +30,24 @@ const ShowCase = () => {
 }
 
 export default ShowCase
+
+const data = [
+  {
+    src: "/videos/1.mp4",
+  },
+  {
+    src: "/videos/2.mp4",
+  },
+  {
+    src: "/videos/3.mp4",
+  },
+  {
+    src: "/videos/4.mp4",
+  },
+  {
+    src: "/videos/5.mp4",
+  },
+  {
+    src: "/videos/6.mp4",
+  },
+];
