@@ -40,19 +40,6 @@ function HeroLanding() {
     },
   };
 
-  // const subtextAnimation = {
-  //   initial: { y: 40, opacity: 0 },
-  //   animate: {
-  //     y: 0,
-  //     opacity: 1,
-  //     transition: {
-  //       duration: 0.8,
-  //       delay: 0.4,
-  //       ease: [0.25, 0.46, 0.45, 0.94],
-  //     },
-  //   },
-  // };
-
   const buttonAnimation = {
     initial: { y: 40, opacity: 0, scale: 0.9 },
     animate: {
@@ -80,95 +67,8 @@ function HeroLanding() {
     return () => clearInterval(interval);
   }, []);
 
-  // Reduced particles for better performance
-  // const particles = Array.from({ length: 12 }, (_, i) => ({
-  //   id: i,
-  //   x: Math.random() * 100,
-  //   y: Math.random() * 100,
-  //   delay: Math.random() * 2,
-  //   duration: 4 + Math.random() * 2,
-  // }));
-
   return (
     <section ref={containerRef} className="relative h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
-      <motion.div className="absolute inset-0 -z-10" style={{ y: backgroundY }}>
-        {/* Black background */}
-        <div className="absolute inset-0 bg-black"></div>
-
-        {/* Enhanced grid pattern */}
-        {/* <div className="absolute inset-0 bg-[linear-gradient(rgba(255,165,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,165,0,0.1)_1px,transparent_1px)] bg-[size:60px_60px] opacity-30"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,215,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,215,0,0.05)_1px,transparent_1px)] bg-[size:20px_20px] opacity-50"></div> */}
-
-        {/* Animated gradient orbs with warm colors */}
-        {/* <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full filter blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.2, 0.4, 0.2],
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute top-3/4 right-1/4 w-80 h-80 bg-gradient-to-r from-orange-500/15 to-red-500/15 rounded-full filter blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.15, 0.3, 0.15],
-            x: [0, -40, 0],
-            y: [0, 40, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 rounded-full filter blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.1, 0.25, 0.1],
-            x: [0, 30, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 4,
-          }}
-        /> */}
-
-        {/* Floating particles with warm glow */}
-        {/* {particles.map((particle) => (
-          <motion.div
-            key={particle.id}
-            className="absolute w-1 h-1 bg-yellow-400/30 rounded-full shadow-[0_0_6px_rgba(255,215,0,0.6)]"
-            style={{
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-            }}
-            animate={{
-              y: [0, -100, 0],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: particle.duration,
-              repeat: Infinity,
-              delay: particle.delay,
-              ease: "easeInOut",
-            }}
-          />
-        ))} */}
-      </motion.div>
-
       <motion.div
         className="container relative z-10 px-6 mx-auto max-w-7xl"
         variants={containerAnimation}
