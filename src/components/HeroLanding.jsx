@@ -40,18 +40,18 @@ function HeroLanding() {
     },
   };
 
-  const subtextAnimation = {
-    initial: { y: 40, opacity: 0 },
-    animate: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        delay: 0.4,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
+  // const subtextAnimation = {
+  //   initial: { y: 40, opacity: 0 },
+  //   animate: {
+  //     y: 0,
+  //     opacity: 1,
+  //     transition: {
+  //       duration: 0.8,
+  //       delay: 0.4,
+  //       ease: [0.25, 0.46, 0.45, 0.94],
+  //     },
+  //   },
+  // };
 
   const buttonAnimation = {
     initial: { y: 40, opacity: 0, scale: 0.9 },
@@ -81,13 +81,13 @@ function HeroLanding() {
   }, []);
 
   // Reduced particles for better performance
-  const particles = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    delay: Math.random() * 2,
-    duration: 4 + Math.random() * 2,
-  }));
+  // const particles = Array.from({ length: 12 }, (_, i) => ({
+  //   id: i,
+  //   x: Math.random() * 100,
+  //   y: Math.random() * 100,
+  //   delay: Math.random() * 2,
+  //   duration: 4 + Math.random() * 2,
+  // }));
 
   return (
     <section ref={containerRef} className="relative h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
@@ -96,11 +96,11 @@ function HeroLanding() {
         <div className="absolute inset-0 bg-black"></div>
 
         {/* Enhanced grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,165,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,165,0,0.1)_1px,transparent_1px)] bg-[size:60px_60px] opacity-30"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,215,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,215,0,0.05)_1px,transparent_1px)] bg-[size:20px_20px] opacity-50"></div>
+        {/* <div className="absolute inset-0 bg-[linear-gradient(rgba(255,165,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,165,0,0.1)_1px,transparent_1px)] bg-[size:60px_60px] opacity-30"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,215,0,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,215,0,0.05)_1px,transparent_1px)] bg-[size:20px_20px] opacity-50"></div> */}
 
         {/* Animated gradient orbs with warm colors */}
-        <motion.div
+        {/* <motion.div
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full filter blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
@@ -143,10 +143,10 @@ function HeroLanding() {
             ease: "easeInOut",
             delay: 4,
           }}
-        />
+        /> */}
 
         {/* Floating particles with warm glow */}
-        {particles.map((particle) => (
+        {/* {particles.map((particle) => (
           <motion.div
             key={particle.id}
             className="absolute w-1 h-1 bg-yellow-400/30 rounded-full shadow-[0_0_6px_rgba(255,215,0,0.6)]"
@@ -166,7 +166,7 @@ function HeroLanding() {
               ease: "easeInOut",
             }}
           />
-        ))}
+        ))} */}
       </motion.div>
 
       <motion.div
@@ -268,40 +268,39 @@ function HeroLanding() {
           {/* Enhanced CTA Section with warm gradient */}
           <motion.div variants={buttonAnimation} className="flex flex-col sm:flex-row items-center gap-6">
             <a
-  href="#contact"
-  aria-label="Book a call"
-  className="group relative inline-flex h-12 lg:h-14 overflow-hidden rounded-2xl p-[1px] focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 hover:scale-105 active:scale-95"
->
-  {/* Animated gradient border - yellowish/orangish */}
-  <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fbbf24_0%,#f59e0b_25%,#ea580c_50%,#fb923c_75%,#fbbf24_100%)]" />
-  
-  {/* Inner button with improved styling */}
-  <span className="relative inline-flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-r from-gray-900 via-black to-gray-900 backdrop-blur-xl px-6 lg:px-8 py-3 text-base lg:text-lg font-semibold text-white transition-all duration-500 group-hover:from-gray-800 group-hover:via-gray-900 group-hover:to-gray-800 group-hover:shadow-2xl group-hover:shadow-orange-500/25">
-    
-    {/* Subtle inner glow effect - orange tinted */}
-    <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-orange-200/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-    
-    {/* Button content */}
-    <span className="relative flex items-center gap-3">
-      <span className="font-medium tracking-wide">Talk with us</span>
-      
-      {/* Enhanced arrow icon */}
-      <svg 
-        className="w-5 h-5 lg:w-6 lg:h-6 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" 
-        fill="none" 
-        stroke="currentColor" 
-        viewBox="0 0 24 24"
-        strokeWidth={2.5}
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-      </svg>
-    </span>
-    
-    {/* Pulse effect on hover - yellow/orange gradient */}
-    <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-600/20 via-orange-600/20 to-amber-600/20 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-700" />
-  </span>
-</a>
+              href="#contact"
+              aria-label="Book a call"
+              className="group relative inline-flex h-12 lg:h-14 overflow-hidden rounded-2xl p-[1px] focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              {/* Animated gradient border - yellowish/orangish */}
+              <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fbbf24_0%,#f59e0b_25%,#ea580c_50%,#fb923c_75%,#fbbf24_100%)]" />
 
+              {/* Inner button with improved styling */}
+              <span className="relative inline-flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-r from-gray-900 via-black to-gray-900 backdrop-blur-xl px-6 lg:px-8 py-3 text-base lg:text-lg font-semibold text-white transition-all duration-500 group-hover:from-gray-800 group-hover:via-gray-900 group-hover:to-gray-800 group-hover:shadow-2xl group-hover:shadow-orange-500/25">
+
+                {/* Subtle inner glow effect - orange tinted */}
+                <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-orange-200/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                {/* Button content */}
+                <span className="relative flex items-center gap-3">
+                  <span className="font-medium tracking-wide">Talk with us</span>
+
+                  {/* Enhanced arrow icon */}
+                  <svg 
+                    className="w-5 h-5 lg:w-6 lg:h-6 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+
+                {/* Pulse effect on hover - yellow/orange gradient */}
+                <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-600/20 via-orange-600/20 to-amber-600/20 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-700" />
+              </span>
+            </a>
           </motion.div>
         </div>
       </motion.div>
