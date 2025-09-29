@@ -687,7 +687,7 @@ export default function Solutions() {
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-86 h-96 bg-blue-500/10 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
