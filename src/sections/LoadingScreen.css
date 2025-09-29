@@ -1,0 +1,139 @@
+/* LoadingScreen.css */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease-out;
+}
+
+.loading-screen.fade-out {
+  opacity: 0;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.logo-container {
+  margin-bottom: 40px;
+  animation: logoFadeIn 1s ease-out;
+}
+
+.elation-logo {
+  animation: logoPulse 2s ease-in-out infinite;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.elation,
+.media {
+  font-family: 'Arial', sans-serif;
+  font-weight: 900;
+  font-size: 48px;
+  color: white;
+  line-height: 0.9;
+  letter-spacing: 2px;
+}
+
+.elation {
+  margin-bottom: 5px;
+}
+
+.loading-spinner {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid #00D4AA;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  font-family: 'Arial', sans-serif;
+  font-size: 18px;
+  color: #ffffff;
+  margin: 0;
+  opacity: 0.8;
+  animation: textFade 1.5s ease-in-out infinite alternate;
+}
+
+/* Animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes logoFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes textFade {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .elation,
+  .media {
+    font-size: 36px;
+  }
+
+  .elation-logo {
+    padding: 15px 30px;
+  }
+
+  .loading-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .elation,
+  .media {
+    font-size: 28px;
+  }
+
+  .elation-logo {
+    padding: 12px 25px;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+  }
+}
