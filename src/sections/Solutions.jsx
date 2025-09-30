@@ -507,9 +507,9 @@ const processCards = [
   },
 ];
 
-const ProcessCard = ({ card, index, setActiveIndex }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { margin: "-50% 0px -50% 0px" });
+const ProcessCard = ({ card, index, setActiveIndex, innerRef }) => {
+  const viewRef = useRef(null);
+  const isInView = useInView(viewRef, { margin: "-50% 0px -50% 0px" });
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
@@ -544,7 +544,10 @@ const ProcessCard = ({ card, index, setActiveIndex }) => {
 
   return (
     <motion.div
-      ref={ref}
+      ref={(el) => {
+        viewRef.current = el;
+        if (innerRef) innerRef(el);
+      }}
       className={`group relative mb-16 rounded-2xl border-2 backdrop-blur-sm ${card.borderColor}`}
       initial={{ opacity: 0, y: 50, scale: 0.95 }}
       whileInView={{ 
@@ -681,6 +684,22 @@ const ProcessCard = ({ card, index, setActiveIndex }) => {
 
 export default function Solutions() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const cardRefs = useRef({});
+
+  // Handle navigation click with scroll offset
+  const handleNavClick = (index) => {
+    setActiveIndex(index);
+    const element = cardRefs.current[index];
+    if (element) {
+      const yOffset = -100; // Adjust this value for spacing from top
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <section className="relative py-24 text-white">
@@ -731,7 +750,7 @@ export default function Solutions() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            Our Proven Process
+            Our Process
           </motion.h2>
 
           <motion.p 
@@ -762,7 +781,7 @@ export default function Solutions() {
         </motion.div>
 
         <div className="mx-auto max-w-6xl lg:grid lg:grid-cols-12 lg:gap-10">
-          {/* Left Column: Sticky Navigation - FIXED VERSION */}
+          {/* Left Column: Sticky Navigation with Click Functionality */}
           <div className="hidden lg:col-span-4 lg:block">
             <div 
               className="sticky top-28 self-start"
@@ -787,7 +806,7 @@ export default function Solutions() {
                         : 'scale-100 opacity-50 hover:opacity-75'
                     }`}
                     whileHover={{ x: activeIndex !== index ? 5 : 0 }}
-                    onClick={() => setActiveIndex(index)}
+                    onClick={() => handleNavClick(index)}
                   >
                     <motion.span 
                       className="text-3xl"
@@ -832,6 +851,11 @@ export default function Solutions() {
                 card={card}
                 index={index}
                 setActiveIndex={setActiveIndex}
+                innerRef={(el) => {
+                  if (el) {
+                    cardRefs.current[index] = el;
+                  }
+                }}
               />
             ))}
           </div>
@@ -840,4 +864,3 @@ export default function Solutions() {
     </section>
   );
 }
-
