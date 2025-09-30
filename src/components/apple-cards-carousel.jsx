@@ -16,7 +16,7 @@ export const CarouselContext = createContext({
 export const Carousel = ({
   items,
   initialScroll = 0,
-  speed = 2,
+  speed = 3,
 }) => {
   const carouselRef = React.useRef(null);
   const containerRef = React.useRef(null);
