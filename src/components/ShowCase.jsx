@@ -20,8 +20,6 @@ const ShowCase = () => {
           <MobileVideoGrid />
         </div>
         <div className="hidden lg:block" style={{ height: '600px', position: 'relative' }}>
-          {/* <CircularGallery bend={1} textColor="#ffffff" borderRadius={0.05} scrollEase={0.02}/> */}
-          {/* <AppleCardsCarouselDemo /> */}
           <AppleCardsCarouselDemo data={data} />
         </div>
       </div>
@@ -33,21 +31,21 @@ export default ShowCase
 
 const data = [
   {
-    src: "/videos/1.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211925/1_gmtrvg.mp4",
   },
   {
-    src: "/videos/2.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211862/2_ync69k.mp4",
   },
   {
-    src: "/videos/3.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211865/3_n0kpa3.mp4",
   },
   {
-    src: "/videos/4.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211866/4_kzmzd9.mp4",
   },
   {
-    src: "/videos/5.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211892/5_vnahrr.mp4",
   },
   {
-    src: "/videos/6.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211873/6_lhnkno.mp4",
   },
 ];
