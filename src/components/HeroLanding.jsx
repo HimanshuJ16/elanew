@@ -1,14 +1,14 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 
-function HeroLanding() {
+function HeroLanding({ isLoadingComplete = true }) {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  // Parallax effects (softened for smoother feel)
+  // Parallax effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
@@ -57,15 +57,30 @@ function HeroLanding() {
     },
   };
 
-  const words = ["Attention.", "Recall.", "Revenue."];
+  const words = ["Revenue.", "Attention.", "Recall."];
   const [index, setIndex] = useState(0);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+
+  // Start word animation only after loading is complete
+  useEffect(() => {
+    if (isLoadingComplete) {
+      // Small delay to ensure smooth transition from loader
+      const startDelay = setTimeout(() => {
+        setShouldAnimate(true);
+      }, 300);
+      return () => clearTimeout(startDelay);
+    }
+  }, [isLoadingComplete]);
 
   useEffect(() => {
+    if (!shouldAnimate) return;
+
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % words.length);
-    }, 2000);
+    }, 2500); // Increased from 2000ms for better readability
+
     return () => clearInterval(interval);
-  }, []);
+  }, [shouldAnimate]);
 
   return (
     <section ref={containerRef} className="relative h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
@@ -73,7 +88,7 @@ function HeroLanding() {
         className="container relative z-10 px-6 mx-auto max-w-7xl"
         variants={containerAnimation}
         initial="initial"
-        animate="animate"
+        animate={isLoadingComplete ? "animate" : "initial"}
         style={{ y: textY }}
       >
         <div className="flex flex-col items-center text-center space-y-12">
@@ -116,44 +131,52 @@ function HeroLanding() {
             </motion.div>
           </motion.div>
 
+          {/* Enhanced Word Animation */}
           <motion.div variants={headingAnimation} className="space-y-6 max-w-5xl">
             <h1 className="text-[4rem] md:text-[10rem] lg:text-[12rem] font-bold text-white leading-[0.9] tracking-tight">
-              <span className="relative inline-block">
+              <span className="relative inline-block" style={{ perspective: "1000px" }}>
                 <AnimatePresence mode="wait">
-                  <motion.span
-                    key={`${words[index]}-${index}`} // Unique key to ensure proper animation triggering
-                    initial={{
-                      y: 30,
-                      opacity: 0,
-                      rotateX: -45,
-                      scale: 0.9,
-                    }}
-                    animate={{
-                      y: 0,
-                      opacity: 1,
-                      rotateX: 0,
-                      scale: 1,
-                    }}
-                    exit={{
-                      y: -30,
-                      opacity: 0,
-                      rotateX: 45,
-                      scale: 0.9,
-                    }}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.25, 0.46, 0.45, 0.94],
-                      type: "spring",
-                      stiffness: 150,
-                      damping: 10,
-                    }}
-                    className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent font-black italic"
-                    style={{ transformOrigin: "center" }}
-                  >
-                    {words[index]}
-                  </motion.span>
+                  {shouldAnimate && (
+                    <motion.span
+                      key={`${words[index]}-${index}`}
+                      initial={{
+                        y: 80,
+                        opacity: 0,
+                        rotateX: 90,
+                        scale: 0.8,
+                        filter: "blur(10px)",
+                      }}
+                      animate={{
+                        y: 0,
+                        opacity: 1,
+                        rotateX: 0,
+                        scale: 1,
+                        filter: "blur(0px)",
+                      }}
+                      exit={{
+                        y: -80,
+                        opacity: 0,
+                        rotateX: -90,
+                        scale: 0.8,
+                        filter: "blur(10px)",
+                      }}
+                      transition={{
+                        duration: 0.6,
+                        ease: [0.22, 1, 0.36, 1], // Custom ease for smoother motion
+                        opacity: { duration: 0.4 },
+                        filter: { duration: 0.3 },
+                      }}
+                      className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent font-black italic"
+                      style={{ 
+                        transformOrigin: "center",
+                        transformStyle: "preserve-3d",
+                      }}
+                    >
+                      {words[index]}
+                    </motion.span>
+                  )}
                 </AnimatePresence>
-                <span className="invisible font-black italic">Attention.</span> {/* Fixed invisible span to longest word to prevent layout shift */}
+                <span className="invisible font-black italic">Attention.</span>
               </span>
             </h1>
           </motion.div>
@@ -165,27 +188,21 @@ function HeroLanding() {
             </span>
           </p>
 
-          {/* Enhanced CTA Section with warm gradient */}
+          {/* Enhanced CTA Section */}
           <motion.div variants={buttonAnimation} className="flex flex-col sm:flex-row items-center gap-6">
             <a
               href="#contact"
               aria-label="Book a call"
               className="group relative inline-flex h-12 lg:h-14 overflow-hidden rounded-2xl p-[1px] focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 hover:scale-105 active:scale-95"
             >
-              {/* Animated gradient border - yellowish/orangish */}
               <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fbbf24_0%,#f59e0b_25%,#ea580c_50%,#fb923c_75%,#fbbf24_100%)]" />
 
-              {/* Inner button with improved styling */}
               <span className="relative inline-flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-r from-gray-900 via-black to-gray-900 backdrop-blur-xl px-6 lg:px-8 py-3 text-base lg:text-lg font-semibold text-white transition-all duration-500 group-hover:from-gray-800 group-hover:via-gray-900 group-hover:to-gray-800 group-hover:shadow-2xl group-hover:shadow-orange-500/25">
-
-                {/* Subtle inner glow effect - orange tinted */}
                 <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-orange-200/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Button content */}
                 <span className="relative flex items-center gap-3">
                   <span className="font-medium tracking-wide">Talk with us</span>
 
-                  {/* Enhanced arrow icon */}
                   <svg 
                     className="w-5 h-5 lg:w-6 lg:h-6 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" 
                     fill="none" 
@@ -197,7 +214,6 @@ function HeroLanding() {
                   </svg>
                 </span>
 
-                {/* Pulse effect on hover - yellow/orange gradient */}
                 <span className="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-600/20 via-orange-600/20 to-amber-600/20 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity duration-700" />
               </span>
             </a>
