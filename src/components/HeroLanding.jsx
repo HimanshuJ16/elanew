@@ -116,7 +116,7 @@ function HeroLanding({ isLoadingComplete = true }) {
                 }}
               />
               <span className="bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text text-transparent">
-                Transforming Digital Marketing
+                We turn interest into income
               </span>
               <motion.svg
                 className="w-4 h-4 ml-2 text-orange-300/60"
@@ -181,10 +181,10 @@ function HeroLanding({ isLoadingComplete = true }) {
             </h1>
           </motion.div>
 
-          <p className="text-sm md:text-md lg:text-lg text-white/70 max-w-2xl leading-relaxed font-light mt-5">
-            At Elation, we listen to your audience, craft engaging content, and place it where it matters most.{" "}
+          <p className="text-sm md:text-md lg:text-[1rem] text-white/70 max-w-2xl leading-relaxed font-light mt-5">
+           Elation’s method drives results across the entire funnel—capturing attention, strengthening recall, and converting revenue.{" "}
             <span className="text-white/90 font-medium bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text">
-              Ads drive sales while micro-campaigns and UGC build loyalty for lasting growth.
+              We combine high-impact advertising with micro-campaigns and authentic UGC to deliver exceptional ROAS, build customer loyalty, and ensure sustainable long-term growth.
             </span>
           </p>
 
