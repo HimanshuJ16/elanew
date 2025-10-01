@@ -7,22 +7,16 @@
 
 html,
 body {
-  width: 100dvw;
-  /* REMOVED overflow-x: hidden; from here */
+  width: 100%; /* Use 100% instead of 100dvw for better compatibility */
+  overflow-x: clip;
   background-color: black;
   color: white;
   scroll-behavior: smooth;
   font-family: "Mona Sans", sans-serif;
 }
 
-/* Add this to prevent horizontal scroll on the body if needed, without breaking sticky */
-body {
-  overflow-x: clip;
-}
-
-
 section {
-  width: 100dvw;
+  width: 100%; /* Change this from 100dvw to 100% */
 }
 
 @theme {
