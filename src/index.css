@@ -8,12 +8,18 @@
 html,
 body {
   width: 100dvw;
-  overflow-x: hidden;
+  /* REMOVED overflow-x: hidden; from here */
   background-color: black;
   color: white;
   scroll-behavior: smooth;
   font-family: "Mona Sans", sans-serif;
 }
+
+/* Add this to prevent horizontal scroll on the body if needed, without breaking sticky */
+body {
+  overflow-x: clip;
+}
+
 
 section {
   width: 100dvw;
