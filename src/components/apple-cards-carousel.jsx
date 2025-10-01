@@ -638,29 +638,15 @@ export const Carousel = ({
   const cardWidth = 300;
   const gap = 16;
 
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1200
-  );
-
-  const totalCardWidth = (cardWidth + gap) * items.length - gap;
-  const viewportWidth = windowWidth;
-  const maxScrollX = Math.max(0, totalCardWidth - viewportWidth);
-
   // Scroll-linked animation with target ref
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
 
-  // Transform scroll progress to horizontal movement using calculated pixels
-  const x = useTransform(scrollYProgress, [0, 1], [0, -maxScrollX]);
+  // Transform scroll progress to horizontal movement (percentage-based for responsiveness)
+  const x = useTransform(scrollYProgress, [0, 1], ["10%", "-30%"]);
 
-  // Handle window resize for responsiveness
-  useEffect(() => {
-    const onResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
+  // Enhanced animation variants for the carousel container
   const containerVariants = {
     hidden: {
       opacity: 0,
@@ -673,10 +659,11 @@ export const Carousel = ({
         duration: 0.8,
         ease: [0.25, 0.1, 0.25, 1],
         staggerChildren: 0.1,
-      },
-    },
+      }
+    }
   };
 
+  // Enhanced animation variants for individual cards
   const cardVariants = {
     hidden: {
       opacity: 0,
@@ -692,8 +679,8 @@ export const Carousel = ({
       transition: {
         duration: 0.6,
         ease: [0.25, 0.1, 0.25, 1],
-      },
-    },
+      }
+    }
   };
 
   const memoizedValue = React.useMemo(
@@ -709,21 +696,21 @@ export const Carousel = ({
       <section ref={targetRef} className="relative h-[300vh]">
         {/* Sticky container that stays in viewport */}
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          <motion.div
+          <motion.div 
             className="relative w-full"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{
+            viewport={{ 
               once: true,
               amount: 0.2,
-              margin: "-50px",
+              margin: "-50px"
             }}
           >
             <div
               className="flex w-full py-10 md:py-20"
               style={{
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <div
@@ -734,7 +721,10 @@ export const Carousel = ({
 
               <motion.div
                 ref={containerRef}
-                className={cn("flex flex-row justify-start pl-4", "max-w-none")}
+                className={cn(
+                  "flex flex-row justify-start pl-4",
+                  "max-w-none"
+                )}
                 style={{
                   gap: `${gap}px`,
                   x: x,
@@ -746,30 +736,30 @@ export const Carousel = ({
                       key={`card-${index}`}
                       className="flex-shrink-0 rounded-3xl"
                       variants={cardVariants}
-                      whileHover={{
+                      whileHover={{ 
                         scale: 1.06,
                         y: -12,
                         rotateY: 5,
-                        transition: {
-                          duration: 0.4,
+                        transition: { 
+                          duration: 0.4, 
                           ease: [0.25, 0.1, 0.25, 1],
                           type: "spring",
                           stiffness: 300,
-                          damping: 20,
-                        },
+                          damping: 20
+                        }
                       }}
                       whileTap={{
                         scale: 0.98,
-                        transition: { duration: 0.1 },
+                        transition: { duration: 0.1 }
                       }}
                       style={{
                         width: `${cardWidth}px`,
                       }}
                     >
-                      {React.cloneElement(item, {
+                      {React.cloneElement(item, { 
                         card: item.props.card,
                         index: index,
-                        layout: item.props.layout,
+                        layout: item.props.layout 
                       })}
                     </motion.div>
                   ))}
