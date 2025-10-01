@@ -32,7 +32,7 @@ export default ShowCase
 
 const data = [
   {
-    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211925/1_gmtrvg.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759310147/1_hacfcs.mp4",
   },
   {
     src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211862/2_ync69k.mp4",
