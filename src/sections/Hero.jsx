@@ -5,7 +5,7 @@ import ShowCase from "../components/ShowCase";
 
 const Hero = () => {
   return (
-    <section id="hero" className="relative overflow-hidden">
+    <section id="hero" className="relative">
       <HeroLanding />
       <ShowCase />
       <AnimatedCounter />

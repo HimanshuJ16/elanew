@@ -19,7 +19,8 @@ const ShowCase = () => {
         <div className="lg:hidden">
           <MobileVideoGrid />
         </div>
-        <div className="hidden lg:block" style={{ height: '600px', position: 'relative' }}>
+        {/* REMOVED fixed height from this div */}
+        <div className="hidden lg:block">
           <AppleCardsCarouselDemo data={data} />
         </div>
       </div>
