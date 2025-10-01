@@ -10,6 +10,23 @@ const ChartIcon = React.memo(({ className = "w-6 h-6" }) => (
   </svg>
 ));
 
+// Instead of SVG component, use img tag
+const MarketingMegaphoneIcon = React.memo(({ className = "w-6 h-6" }) => (
+  <img 
+    src="/images/image.svg" 
+    alt="Marketing Strategy" 
+    className={className}
+  />
+));
+
+const ContentIcon = React.memo(({ className = "w-6 h-6" }) => (
+  <img 
+    src="/images/content.png" 
+    alt="Marketing Strategy" 
+    className={className}
+  />
+));
+
 const CreativeIcon = React.memo(({ className = "w-6 h-6" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">
     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
@@ -185,30 +202,30 @@ const ServiceShowcase = () => {
       id: 1,
       title: "Marketing Strategy",
       subtitle: "Strategic Planning & Analysis",
-      icon: ChartIcon,
+      icon: MarketingMegaphoneIcon,
       gradient: "from-blue-500 via-blue-600 to-indigo-700",
       glowColor: "59, 130, 246",
       items: [
-        { title: "Audience Mapping & Market Research", desc: "Conduct competitor scans, surveys, focus groups, and social listening to map behavior, motivations, and preferences.", icon: "👥" },
-        { title: "Brand Positioning & Strategy", desc: "Define unique brand proposition, messaging frameworks, tone of voice, and identity for consistent resonance.", icon: "🎯" },
-        { title: "MicroCampaign Development", desc: "Design high-impact, short-term campaigns with clear objectives, hooks, and CTAs to drive measurable results.", icon: "💡" },
-        { title: "Channel & Touchpoint Strategy", desc: "Identify and prioritize key digital/offline channels, mapping journeys for maximum engagement.", icon: "📡" },
-        { title: "KPI Setting & Success Metrics", desc: "Establish performance indicators including engagement, conversions, ROI, and growth metrics.", icon: "📊" },
+        { title: "Audience Mapping & Market Research", desc: "Conduct in-depth research using competitor scans, surveys, focus groups, social listening on Reddit, Quora, and X, and community engagement to map behavior, motivations, and preferences across key segments.", icon: "👥" },
+        { title: "Brand Positioning & Strategy", desc: "Define your unique brand proposition, messaging frameworks, tone of voice, and visual identity to differentiate your brand and resonate consistently across all touchpoints.", icon: "🎯" },
+        { title: "MicroCampaign Development", desc: "Design high-impact, short-term campaigns with clear objectives, hooks, and calls-to-action that drive measurable engagement, awareness, and conversions within defined timeframes.", icon: "💡" },
+        { title: "Channel & Touchpoint Strategy", desc: "Identify and prioritize key digital and offline channels, mapping user journeys and touchpoints to ensure maximum visibility, engagement, and audience conversion potential.", icon: "📡" },
+        { title: "KPI Setting & Success Metrics", desc: "Establish clear performance indicators, including engagement, conversions, ROI, and brand growth metrics, to measure impact and guide future strategic decisions.", icon: "📊" },
       ],
     },
     {
       id: 2,
       title: "Content Creation",
       subtitle: "Creative Production & Design",
-      icon: CreativeIcon,
+      icon: ContentIcon,
       gradient: "from-emerald-500 via-green-500 to-teal-600",
       glowColor: "16, 185, 129",
       items: [
-        { title: "Content Writing & Ideation", desc: "Craft scripts, captions, ad copy, and storytelling frameworks aligned with brand voice and platforms.", icon: "✍️" },
-        { title: "Videography & Photography", desc: "Plan and execute studio + lifestyle shoots capturing high-quality visuals for campaigns.", icon: "🎬" },
-        { title: "UGC & Influencer Collaboration", desc: "Partner with creators and influencers for authentic, shareable, and trust-building content.", icon: "🤝" },
-        { title: "Creative Storyboarding & Planning", desc: "Develop detailed storyboards ensuring narrative clarity and campaign alignment.", icon: "🗂️" },
-        { title: "Tone & Brand Consistency", desc: "Maintain consistent voice, style, and messaging across all creative assets.", icon: "🎨" },
+        { title: "Content Writing & Ideation", desc: "Craft compelling scripts, captions, ad copy, and storytelling frameworks aligned with your brand voice, audience preferences, and platform-specific nuances for optimal reach and engagement.", icon: "✍️" },
+        { title: "Videography & Photography", desc: "Plan and execute professional studio and lifestyle shoots that capture high-quality visuals, authentic storytelling, and content diversity to meet multiple campaign objectives.", icon: "🎬" },
+        { title: "UGC & Influencer Collaboration", desc: "Partner with creators and influencers to generate authentic, shareable content that expands reach, builds trust, and enhances your brand’s credibility among target communities.", icon: "🤝" },
+        { title: "Creative Storyboarding & Planning", desc: "Develop detailed storyboards and production plans, ensuring creative consistency, narrative clarity, and alignment with campaign objectives across all content formats.", icon: "🗂️" },
+        { title: "Tone & Brand Consistency", desc: "Maintain a consistent voice, visual style, and messaging framework across all creative output to reinforce brand identity and audience recognition over time.", icon: "🎨" },
       ],
     },
     {
@@ -219,11 +236,11 @@ const ServiceShowcase = () => {
       gradient: "from-purple-500 via-violet-600 to-purple-700",
       glowColor: "168, 85, 247",
       items: [
-        { title: "Video Editing (SFX + VFX)", desc: "Refine footage with graphics, effects, sound design, and post-production polish.", icon: "✂️" },
-        { title: "Platform-Specific Formatting", desc: "Adapt content to meet specifications for Instagram, YouTube, LinkedIn, X, and more.", icon: "📱" },
-        { title: "Cross-Platform Publishing", desc: "Publish across brand pages, hyperlocal handles, and partners to maximize reach.", icon: "🌐" },
-        { title: "Scheduling & Campaign Seeding", desc: "Plan and seed content at optimal times for visibility, engagement, and recall.", icon: "⏰" },
-        { title: "Content Repurposing & Adaptation", desc: "Transform raw content into Reels, Shorts, Carousels, and Stories for extended ROI.", icon: "♻️" },
+        { title: "Video Editing (SFX + VFX)", desc: "Refine raw footage using motion graphics, visual effects, color grading, sound design, and post-production techniques to produce polished, professional, and audience-ready content.", icon: "✂️" },
+        { title: "Platform-Specific Formatting", desc: "Adapt content to meet specifications, aspect ratios, durations, and style conventions for Instagram, YouTube, LinkedIn, X, and other social platforms to maximize performance.", icon: "📱" },
+        { title: "Cross-Platform Publishing", desc: "Publish content across main brand pages, hyperlocal handles, and partner channels, ensuring synchronized scheduling, reach amplification, and consistent audience engagement.", icon: "🌐" },
+        { title: "Scheduling & Campaign Seeding", desc: "Strategically plan and seed content at optimal times and sequences to boost visibility, engagement, shareability, and overall campaign effectiveness.", icon: "⏰" },
+        { title: "Content Repurposing & Adaptation", desc: "Transform raw content into multiple formats including Reels, Shorts, Carousels, and Stories to extend shelf-life, increase platform coverage, and compound content ROI.", icon: "♻️" },
       ],
     },
     {
@@ -234,11 +251,11 @@ const ServiceShowcase = () => {
       gradient: "from-orange-500 via-red-500 to-pink-600",
       glowColor: "249, 115, 22",
       items: [
-        { title: "Paid Media Planning & Execution", desc: "Launch and optimize campaigns across Meta, YouTube, LinkedIn, targeting precise audiences.", icon: "📢" },
-        { title: "Retargeting & Engagement Optimization", desc: "Re-engage warm audiences, nurture leads, and drive conversions while reducing ad waste.", icon: "🔄" },
-        { title: "Performance Tracking & Optimization", desc: "Monitor CPM, CTR, ROAS, and conversions to refine targeting and improve ROI.", icon: "📈" },
-        { title: "A/B Testing & Funnel Refinement", desc: "Test creatives, hooks, and landing pages to identify high-performing variants.", icon: "🧪" },
-        { title: "Full-Funnel Campaign Management", desc: "Manage awareness, consideration, and conversion campaigns end-to-end.", icon: "🛠️" },
+        { title: "Paid Media Planning & Execution", desc: "Launch and optimize campaigns across Meta, YouTube, LinkedIn, and other channels, targeting precise audiences with clear objectives to achieve high engagement and ROI.", icon: "📢" },
+        { title: "Retargeting & Engagement Optimization", desc: "Re-engage audiences that have interacted with your brand, nurture leads effectively, and drive higher conversions while minimizing ad spend waste.", icon: "🔄" },
+        { title: "Performance Tracking & Optimization", desc: "Monitor and evaluate CPM, CTR, ROAS, conversions, and other KPIs to continuously optimize campaigns, refine targeting, and improve overall effectiveness.", icon: "📈" },
+        { title: "A/B Testing & Funnel Refinement", desc: "Systematically test creatives, messaging, hooks, and landing pages to identify high-performing variants and improve the efficiency of the marketing funnel.", icon: "🧪" },
+        { title: "Full-Funnel Campaign Management", desc: "Oversee awareness, consideration, and conversion campaigns end-to-end, coordinating targeting, creative, and optimization strategies to maximize results at every stage.", icon: "🛠️" },
       ],
     },
     {
@@ -249,11 +266,11 @@ const ServiceShowcase = () => {
       gradient: "from-pink-500 via-rose-500 to-red-600",
       glowColor: "236, 72, 153",
       items: [
-        { title: "Social Community Engagement", desc: "Manage brand communities across Discord, WhatsApp, Telegram, and social platforms.", icon: "💬" },
-        { title: "Customer Advocacy Programs", desc: "Turn loyal users into brand advocates for amplified reach and credibility.", icon: "🙌" },
-        { title: "Engagement Workshop Management", desc: "Host webinars, live workshops, and interactive sessions for audience bonding.", icon: "🎤" },
-        { title: "Content & Discussion Moderation", desc: "Guide community discussions to ensure relevance, alignment, and positivity.", icon: "🛡️" },
-        { title: "Feedback & Insights Loops", desc: "Capture community sentiment to inform campaigns, products, and strategies.", icon: "🔍" },
+        { title: "Social Community Engagement", desc: "Build and manage brand communities across Discord, WhatsApp, Telegram, and social platforms, driving conversations, participation, and meaningful audience interaction.", icon: "💬" },
+        { title: "Customer Advocacy Programs", desc: "Design programs that convert loyal users into active brand advocates, amplifying reach, credibility, and word-of-mouth promotion for sustainable growth.", icon: "🙌" },
+        { title: "Engagement Workshop Management", desc: "Organize webinars, live workshops, and interactive sessions to foster meaningful audience engagement, learning, and brand affinity across your community.", icon: "🎤" },
+        { title: "Content & Discussion Moderation", desc: "Monitor and guide conversations within your communities, ensuring alignment with brand values, relevance, and a positive engagement environment.", icon: "🛡️" },
+        { title: "Feedback & Insights Loops", desc: "Capture audience sentiment, discussions, and feedback to inform content, campaigns, product development, and ongoing community strategy decisions.", icon: "🔍" },
       ],
     },
     {
@@ -264,11 +281,11 @@ const ServiceShowcase = () => {
       gradient: "from-cyan-500 via-sky-500 to-blue-600",
       glowColor: "6, 182, 212",
       items: [
-        { title: "Branded Podcasts & Web Series", desc: "Develop recurring storytelling formats that drive retention and engagement.", icon: "🎙️" },
-        { title: "Scalable Content Products", desc: "Build reusable assets and templates for efficient multi-format content output.", icon: "📦" },
-        { title: "IP Strategy & Long-Term Planning", desc: "Establish evergreen initiatives and flagship content for sustained impact.", icon: "📑" },
-        { title: "Format & Series Optimization", desc: "Test and refine formats, approaches, and structures for better scalability.", icon: "⚙️" },
-        { title: "Monetization & Brand Extension", desc: "Turn digital IP into revenue-generating products, subscriptions, and extensions.", icon: "💰" },
+        { title: "Branded Podcasts & Web Series", desc: "Develop recurring storytelling formats that engage audiences, reinforce brand identity, and create long-term audience retention across digital platforms.", icon: "🎙️" },
+        { title: "Scalable Content Products", desc: "Build reusable assets, toolkits, and templates that streamline content production, ensure quality, and allow for efficient multi-format output over time.", icon: "📦" },
+        { title: "IP Strategy & Long-Term Planning", desc: "Establish a strategy for recurring initiatives, evergreen series, and flagship content that maximizes audience engagement and brand impact.", icon: "📑" },
+        { title: "Format & Series Optimization", desc: "Continuously analyze, test, and refine IP formats, storytelling approaches, and episode structures to improve performance and scalability.", icon: "⚙️" },
+        { title: "Monetization & Brand Extension", desc: "Identify and implement opportunities to transform digital IP into revenue-generating products, subscription models, and other brand extension initiatives.", icon: "💰" },
       ],
     },
   ], []);

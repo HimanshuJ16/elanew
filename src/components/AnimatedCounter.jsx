@@ -8,6 +8,8 @@ import { counterItems } from "../constants";
 
 gsap.registerPlugin(ScrollTrigger, Flip);
 
+const isImage = icon => typeof icon === "string" && icon.startsWith("/images/");
+
 const AnimatedCounter = () => {
   const containerRef = useRef(null);
   const counterRefs = useRef([]);
@@ -124,9 +126,9 @@ const AnimatedCounter = () => {
 
   const getIconForItem = (index) => {
     const icons = [
-      "🎯", // Projects
+      "/images/impressions.png", // Projects
       "👥",  // Clients
-      "▶️",  // Campaigns
+      "/images/creatives.png",  // Campaigns
       "🌍"   // Growth
     ];
     return icons[index % icons.length];
@@ -214,24 +216,23 @@ const AnimatedCounter = () => {
               ></div>
 
               {/* Icon */}
-              <div 
-                ref={(el) => el && (iconRefs.current[index] = el)}
-                className="relative z-10 mb-6"
-              >
-                <motion.span 
-                  className="text-4xl lg:text-5xl"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, 0]
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  {item.icon}
-                </motion.span>
+              <div ref={el => el && (iconRefs.current[index] = el)}
+                className="relative z-10 mb-6 flex justify-center items-center" style={{ minHeight: "52px" }}>
+                {isImage(item.icon) ? (
+                  <motion.img src={item.icon}
+                    alt={item.label + " icon"}
+                    className="w-12 h-12 mx-auto"
+                    animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                ) : (
+                  <motion.span className="text-4xl lg:text-5xl"
+                    animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    {item.icon}
+                  </motion.span>
+                )}
               </div>
 
               {/* Counter number */}
