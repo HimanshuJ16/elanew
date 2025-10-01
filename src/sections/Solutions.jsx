@@ -296,7 +296,7 @@ export default function Solutions() {
   };
 
   return (
-    <section className="relative py-24 text-white">
+    <section id="solutions" className="relative py-24 text-white">
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div

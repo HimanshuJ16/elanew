@@ -6,8 +6,8 @@ const navLinks = [
     link: "/#hero",
   },
   {
-    name: "Services",
-    link: "/#services",
+    name: "Process",
+    link: "/#solutions",
   },
   {
     name: "Resources",

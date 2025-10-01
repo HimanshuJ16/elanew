@@ -1,11 +1,40 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { navLinks } from "../constants";
 import elationLogo from '../../public/images/elationlogo.jpg';
 
 const NavBar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleNavClick = (e, link) => {
+    if (link.startsWith('/#')) {
+      e.preventDefault();
+      setMobileMenuOpen(false);
+      const id = link.split('#')[1];
+      
+      // If we are not on the homepage, navigate to it first
+      if (window.location.pathname !== '/') {
+        navigate('/');
+        // Use a timeout to allow the page to change before scrolling
+        setTimeout(() => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 100);
+      } else {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    } else {
+        setMobileMenuOpen(false);
+    }
+  };
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,6 +76,7 @@ const NavBar = () => {
           <div className="flex-shrink-0">
             <Link 
               to="/#hero" 
+              onClick={(e) => handleNavClick(e, '/#hero')}
               className="group flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-xl transition-all duration-300"
               aria-label="Elation - Home"
             >
@@ -69,7 +99,17 @@ const NavBar = () => {
             <ul className="flex items-center space-x-1">
               {navLinks.map(({ link, name }) => (
                 <li key={name}>
-                  {link.startsWith('/') ? (
+                  {link.startsWith('/#') ? (
+                    <a 
+                      href={link}
+                      onClick={(e) => handleNavClick(e, link)}
+                      className="group relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
+                    >
+                      <span className="relative z-10 font-medium">{name}</span>
+                      <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"></div>
+                      <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></div>
+                    </a>
+                  ) : (
                     <Link 
                       to={link}
                       className="group relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
@@ -78,15 +118,6 @@ const NavBar = () => {
                       <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"></div>
                       <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></div>
                     </Link>
-                  ) : (
-                    <a 
-                      href={link}
-                      className="group relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
-                    >
-                      <span className="relative z-10 font-medium">{name}</span>
-                      <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"></div>
-                      <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></div>
-                    </a>
                   )}
                 </li>
               ))}
@@ -139,7 +170,15 @@ const NavBar = () => {
             <ul className="space-y-3">
               {navLinks.map(({ link, name }) => (
                 <li key={name}>
-                  {link.startsWith('/') ? (
+                  {link.startsWith('/#') ? (
+                    <a 
+                      href={link}
+                      onClick={(e) => handleNavClick(e, link)}
+                      className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent"
+                    >
+                      <span className="font-medium">{name}</span>
+                    </a>
+                  ) : (
                     <Link 
                       to={link}
                       onClick={() => setMobileMenuOpen(false)}
@@ -147,14 +186,6 @@ const NavBar = () => {
                     >
                       <span className="font-medium">{name}</span>
                     </Link>
-                  ) : (
-                    <a 
-                      href={link}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent"
-                    >
-                      <span className="font-medium">{name}</span>
-                    </a>
                   )}
                 </li>
               ))}
