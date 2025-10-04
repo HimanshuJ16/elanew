@@ -628,30 +628,21 @@ export const CarouselContext = createContext({
   currentIndex: 0,
 });
 
-export const Carousel = ({
-  items,
-  initialScroll = 0,
-}) => {
+export const Carousel = ({ items, initialScroll = 0 }) => {
   const targetRef = useRef(null);
   const containerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const cardWidth = 300;
   const gap = 16;
 
-  // Scroll-linked animation with target ref
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
 
-  // Transform scroll progress to horizontal movement (percentage-based for responsiveness)
   const x = useTransform(scrollYProgress, [0, 1], ["10%", "-30%"]);
 
-  // Enhanced animation variants for the carousel container
   const containerVariants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-    },
+    hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
       y: 0,
@@ -659,18 +650,12 @@ export const Carousel = ({
         duration: 0.8,
         ease: [0.25, 0.1, 0.25, 1],
         staggerChildren: 0.1,
-      }
-    }
+      },
+    },
   };
 
-  // Enhanced animation variants for individual cards
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 40,
-      scale: 0.9,
-      rotateX: 15,
-    },
+    hidden: { opacity: 0, y: 40, scale: 0.9, rotateX: 15 },
     visible: {
       opacity: 1,
       y: 0,
@@ -679,56 +664,37 @@ export const Carousel = ({
       transition: {
         duration: 0.6,
         ease: [0.25, 0.1, 0.25, 1],
-      }
-    }
+      },
+    },
   };
 
   const memoizedValue = React.useMemo(
-    () => ({
-      currentIndex: currentIndex,
-    }),
+    () => ({ currentIndex }),
     [currentIndex]
   );
 
   return (
     <CarouselContext.Provider value={memoizedValue}>
-      {/* Tall section to enable vertical scrolling - this creates the scroll area */}
       <section ref={targetRef} className="relative h-[300vh]">
-        {/* Sticky container that stays in viewport */}
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          <motion.div 
+          <motion.div
             className="relative w-full"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ 
+            viewport={{
               once: true,
               amount: 0.2,
-              margin: "-50px"
+              margin: "-50px",
             }}
           >
-            <div
-              className="flex w-full py-10 md:py-20"
-              style={{
-                overflow: 'hidden',
-              }}
-            >
-              <div
-                className={cn(
-                  "absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l"
-                )}
-              ></div>
+            <div className="flex w-full py-10 md:py-20" style={{ overflow: "hidden" }}>
+              <div className={cn("absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l")}></div>
 
               <motion.div
                 ref={containerRef}
-                className={cn(
-                  "flex flex-row justify-start pl-4",
-                  "max-w-none"
-                )}
-                style={{
-                  gap: `${gap}px`,
-                  x: x,
-                }}
+                className={cn("flex flex-row justify-start pl-4", "max-w-none")}
+                style={{ gap: `${gap}px`, x }}
               >
                 <AnimatePresence mode="wait">
                   {items.map((item, index) => (
@@ -736,30 +702,25 @@ export const Carousel = ({
                       key={`card-${index}`}
                       className="flex-shrink-0 rounded-3xl"
                       variants={cardVariants}
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.06,
                         y: -12,
                         rotateY: 5,
-                        transition: { 
-                          duration: 0.4, 
+                        transition: {
+                          duration: 0.4,
                           ease: [0.25, 0.1, 0.25, 1],
                           type: "spring",
                           stiffness: 300,
-                          damping: 20
-                        }
+                          damping: 20,
+                        },
                       }}
-                      whileTap={{
-                        scale: 0.98,
-                        transition: { duration: 0.1 }
-                      }}
-                      style={{
-                        width: `${cardWidth}px`,
-                      }}
+                      whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+                      style={{ width: `${cardWidth}px` }}
                     >
-                      {React.cloneElement(item, { 
+                      {React.cloneElement(item, {
                         card: item.props.card,
-                        index: index,
-                        layout: item.props.layout 
+                        index,
+                        layout: item.props.layout,
                       })}
                     </motion.div>
                   ))}
@@ -773,11 +734,8 @@ export const Carousel = ({
   );
 };
 
-export const Card = ({
-  card,
-  index,
-  layout = false,
-}) => {
+// Memoized Card component to prevent unnecessary re-renders
+export const Card = React.memo(({ card, index, layout = false }) => {
   const { currentIndex } = useContext(CarouselContext);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -787,9 +745,9 @@ export const Card = ({
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = React.useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
   return (
     <>
@@ -797,28 +755,28 @@ export const Card = ({
         layoutId={layout ? `card-${card.title}` : undefined}
         className="rounded-3xl bg-gray-100 dark:bg-neutral-900 h-80 w-56 md:h-[30rem] md:w-72 overflow-hidden flex flex-col items-start justify-start relative z-10 shadow-lg cursor-pointer"
         onClick={handleCardClick}
-        whileHover={{ 
+        whileHover={{
           scale: 1.03,
           rotateY: 8,
           rotateX: 2,
-          transition: { 
-            duration: 0.4, 
+          transition: {
+            duration: 0.4,
             ease: [0.25, 0.1, 0.25, 1],
             type: "spring",
             stiffness: 400,
-            damping: 25
-          }
+            damping: 25,
+          },
         }}
         initial={{ rotateX: 20, opacity: 0.7, scale: 0.95 }}
-        whileInView={{ 
-          rotateX: 0, 
-          opacity: 1, 
+        whileInView={{
+          rotateX: 0,
+          opacity: 1,
           scale: 1,
           transition: {
             duration: 0.8,
             ease: [0.25, 0.1, 0.25, 1],
-            delay: (index % 10) * 0.1
-          }
+            delay: (index % 10) * 0.1,
+          },
         }}
         viewport={{ once: true, amount: 0.3 }}
         style={{
@@ -832,15 +790,15 @@ export const Card = ({
             layoutId={layout ? `category-${card.category}` : undefined}
             className="text-white text-sm md:text-base font-medium font-sans text-left backdrop-blur-sm"
             initial={{ opacity: 0, y: 25, filter: "blur(4px)" }}
-            whileInView={{ 
-              opacity: 1, 
-              y: 0, 
+            whileInView={{
+              opacity: 1,
+              y: 0,
               filter: "blur(0px)",
-              transition: { 
-                delay: 0.3, 
+              transition: {
+                delay: 0.3,
                 duration: 0.6,
-                ease: [0.25, 0.1, 0.25, 1]
-              }
+                ease: [0.25, 0.1, 0.25, 1],
+              },
             }}
             viewport={{ once: true }}
           >
@@ -850,25 +808,29 @@ export const Card = ({
             layoutId={layout ? `title-${card.title}` : undefined}
             className="text-white text-xl md:text-3xl font-semibold max-w-xs text-left [text-wrap:balance] font-sans mt-2 backdrop-blur-sm"
             initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
-            whileInView={{ 
-              opacity: 1, 
-              y: 0, 
+            whileInView={{
+              opacity: 1,
+              y: 0,
               filter: "blur(0px)",
-              transition: { 
-                delay: 0.5, 
+              transition: {
+                delay: 0.5,
                 duration: 0.6,
-                ease: [0.25, 0.1, 0.25, 1]
-              }
+                ease: [0.25, 0.1, 0.25, 1],
+              },
             }}
             viewport={{ once: true }}
           >
             {card.title}
           </motion.p>
         </div>
-        <VideoBackground src={card.src} onLoad={() => setImageLoaded(true)} />
-        
+        <VideoBackground 
+          src={card.src} 
+          onLoad={() => setImageLoaded(true)}
+          poster={card.poster}
+        />
+
         {!imageLoaded && (
-          <motion.div 
+          <motion.div
             className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-neutral-800 dark:to-neutral-900"
             initial={{ opacity: 1 }}
             animate={{ opacity: imageLoaded ? 0 : 1 }}
@@ -877,21 +839,16 @@ export const Card = ({
         )}
       </motion.div>
 
-      {/* Video Modal using Portal */}
       <AnimatePresence>
-        {isModalOpen && (
-          <VideoModal 
-            card={card} 
-            handleClose={handleCloseModal} 
-          />
-        )}
+        {isModalOpen && <VideoModal card={card} handleClose={handleCloseModal} />}
       </AnimatePresence>
     </>
   );
-};
+});
 
-// Backdrop Component
-const Backdrop = ({ children, onClick }) => {
+Card.displayName = "Card";
+
+const Backdrop = React.memo(({ children, onClick }) => {
   return (
     <motion.div
       onClick={onClick}
@@ -900,9 +857,9 @@ const Backdrop = ({ children, onClick }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      style={{ 
+      style={{
         zIndex: 9999,
-        position: 'fixed',
+        position: "fixed",
         top: 0,
         left: 0,
         right: 0,
@@ -912,45 +869,51 @@ const Backdrop = ({ children, onClick }) => {
       {children}
     </motion.div>
   );
-};
+});
 
-// Video Modal Component with Portal
-const VideoModal = ({ card, handleClose }) => {
+Backdrop.displayName = "Backdrop";
+
+const VideoModal = React.memo(({ card, handleClose }) => {
   const videoRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Restart video from beginning when modal opens
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play();
+      
+      // Start playing when enough data is loaded
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.log("Autoplay prevented:", error);
+        });
+      }
     }
 
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
-    
+    document.body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, []);
 
-  // Handle escape key to close modal
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         handleClose();
       }
     };
 
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
   }, [handleClose]);
 
+  const handleLoadedData = () => {
+    setIsLoading(false);
+  };
+
   const modalVariants = {
-    hidden: {
-      y: "-100vh",
-      opacity: 0,
-      scale: 0.5,
-    },
+    hidden: { y: "-100vh", opacity: 0, scale: 0.5 },
     visible: {
       y: 0,
       opacity: 1,
@@ -982,11 +945,8 @@ const VideoModal = ({ card, handleClose }) => {
         initial="hidden"
         animate="visible"
         exit="exit"
-        style={{
-          maxHeight: '90vh',
-        }}
+        style={{ maxHeight: "90vh" }}
       >
-        {/* Close Button */}
         <motion.button
           onClick={handleClose}
           className="absolute top-4 right-4 z-50 w-12 h-12 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full transition-colors"
@@ -1010,19 +970,26 @@ const VideoModal = ({ card, handleClose }) => {
           </svg>
         </motion.button>
 
-        {/* Video Player */}
-        <div className="relative w-full bg-black" style={{ paddingBottom: '56.25%' }}>
+        {/* Loading indicator */}
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-40">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white"></div>
+          </div>
+        )}
+
+        <div className="relative w-full bg-black" style={{ paddingBottom: "56.25%" }}>
           <video
             ref={videoRef}
             className="absolute inset-0 w-full h-full object-contain"
             controls
-            autoPlay
             controlsList="nodownload"
+            preload="metadata"
             src={card.src}
+            onLoadedData={handleLoadedData}
+            poster={card.poster}
           />
         </div>
 
-        {/* Video Info */}
         <motion.div
           className="p-6 md:p-8 bg-gradient-to-t from-black via-black/95 to-transparent"
           initial={{ opacity: 0, y: 20 }}
@@ -1030,33 +997,64 @@ const VideoModal = ({ card, handleClose }) => {
           transition={{ delay: 0.2 }}
         >
           <p className="text-sm md:text-base text-gray-400 mb-2">{card.category}</p>
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-3">
-            {card.title}
-          </h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-3">{card.title}</h2>
           {card.description && (
-            <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-              {card.description}
-            </p>
+            <p className="text-gray-300 text-sm md:text-base leading-relaxed">{card.description}</p>
           )}
         </motion.div>
       </motion.div>
     </Backdrop>
   );
 
-  // Render modal using Portal to document.body
-  return createPortal(
-    modalContent,
-    document.body
-  );
-};
+  return createPortal(modalContent, document.body);
+});
 
-export const VideoBackground = ({
-  src,
-  className,
-  onLoad,
-  ...rest
-}) => {
+VideoModal.displayName = "VideoModal";
+
+// Optimized VideoBackground with Intersection Observer
+export const VideoBackground = React.memo(({ src, className, onLoad, poster, ...rest }) => {
+  const videoRef = useRef(null);
+  const containerRef = useRef(null);
   const [isLoading, setLoading] = useState(true);
+  const [isInView, setIsInView] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  // Intersection Observer to detect when video is in viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+        
+        // Load video when it's close to viewport
+        if (entry.isIntersecting && !shouldLoad) {
+          setShouldLoad(true);
+        }
+
+        // Play/pause based on visibility
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {
+              // Autoplay prevented
+            });
+          } else {
+            videoRef.current.pause();
+          }
+        }
+      },
+      {
+        threshold: 0.25,
+        rootMargin: "100px", // Start loading 100px before entering viewport
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [shouldLoad]);
 
   const handleLoadedData = () => {
     setLoading(false);
@@ -1064,31 +1062,46 @@ export const VideoBackground = ({
   };
 
   return (
-    <motion.video
-      className={cn(
-        "object-cover absolute z-10 inset-0 h-full w-full transition-all duration-700",
-        isLoading ? "blur-md scale-110" : "blur-0 scale-100",
-        className
+    <div ref={containerRef} className="absolute inset-0">
+      {shouldLoad ? (
+        <motion.video
+          ref={videoRef}
+          className={cn(
+            "object-cover absolute z-10 inset-0 h-full w-full transition-all duration-700",
+            isLoading ? "blur-md scale-110" : "blur-0 scale-100",
+            className
+          )}
+          loop
+          muted
+          playsInline
+          preload="none"
+          poster={poster}
+          onLoadedData={handleLoadedData}
+          src={src}
+          initial={{ scale: 1.2, opacity: 0, filter: "blur(8px)" }}
+          animate={{
+            scale: isLoading ? 1.2 : 1,
+            opacity: isLoading ? 0.7 : 1,
+            filter: isLoading ? "blur(8px)" : "blur(0px)",
+          }}
+          transition={{
+            duration: 0.8,
+            ease: [0.25, 0.1, 0.25, 1],
+            opacity: { duration: 1.2 },
+          }}
+          {...rest}
+        />
+      ) : (
+        poster && (
+          <img
+            src={poster}
+            alt="Video thumbnail"
+            className="object-cover absolute z-10 inset-0 h-full w-full"
+          />
+        )
       )}
-      autoPlay
-      loop
-      muted
-      playsInline
-      onLoadedData={handleLoadedData}
-      src={src}
-      initial={{ scale: 1.2, opacity: 0, filter: "blur(8px)" }}
-      animate={{ 
-        scale: isLoading ? 1.2 : 1, 
-        opacity: isLoading ? 0.7 : 1,
-        filter: isLoading ? "blur(8px)" : "blur(0px)"
-      }}
-      transition={{ 
-        duration: 0.8, 
-        ease: [0.25, 0.1, 0.25, 1],
-        opacity: { duration: 1.2 }
-      }}
-      viewport={{ once: true }}
-      {...rest}
-    />
+    </div>
   );
-};
+});
+
+VideoBackground.displayName = "VideoBackground";
