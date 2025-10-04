@@ -93,7 +93,7 @@ function HeroLanding({ isLoadingComplete = true }) {
       >
         <div className="flex flex-col items-center text-center space-y-12">
           {/* Enhanced Badge */}
-          <motion.div variants={headingAnimation} className="group">
+          {/* <motion.div variants={headingAnimation} className="group">
             <motion.div
               className="inline-flex items-center px-6 py-3 bg-white/5 backdrop-blur-md border border-orange-500/20 rounded-full text-sm font-medium text-white/90 shadow-2xl"
               whileHover={{
@@ -129,7 +129,7 @@ function HeroLanding({ isLoadingComplete = true }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </motion.svg>
             </motion.div>
-          </motion.div>
+          </motion.div> */}
 
           {/* Enhanced Word Animation */}
           <motion.div variants={headingAnimation} className="space-y-6 max-w-5xl">

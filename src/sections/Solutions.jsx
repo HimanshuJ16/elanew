@@ -326,7 +326,7 @@ export default function Solutions() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <motion.div
+          {/* <motion.div
             className="inline-block mb-4"
             initial={{ scale: 0 }}
             whileInView={{ scale: 1 }}
@@ -336,7 +336,7 @@ export default function Solutions() {
               <Sparkles className="w-4 h-4" />
               Our Process
             </span>
-          </motion.div>
+          </motion.div> */}
 
           <motion.h2 
             className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent"

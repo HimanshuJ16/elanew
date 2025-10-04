@@ -219,19 +219,19 @@ const AnimatedCounter = () => {
               <div ref={el => el && (iconRefs.current[index] = el)}
                 className="relative z-10 mb-6 flex justify-center items-center" style={{ minHeight: "52px" }}>
                 {isImage(item.icon) ? (
-                  <motion.img src={item.icon}
+                  <img src={item.icon}
                     alt={item.label + " icon"}
-                    className="w-12 h-12 mx-auto"
+                    className="w-16 h-16 mx-auto"
                     animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   />
                 ) : (
-                  <motion.span className="text-4xl lg:text-5xl"
+                  <span className="text-4xl lg:text-5xl"
                     animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   >
                     {item.icon}
-                  </motion.span>
+                  </span>
                 )}
               </div>
 
