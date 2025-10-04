@@ -134,11 +134,11 @@ const perksAndBenefits = [
   }
 ];
 
-const JobCard = ({ position, index, category }) => {
+const JobCard = ({ position, index, category, navigate }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div
+    <button
       className="group relative bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 hover:bg-gray-800/70 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -150,7 +150,7 @@ const JobCard = ({ position, index, category }) => {
       <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-orange-400/5 to-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
       
       <div className="relative z-10">
-        <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-yellow-400 transition-colors duration-300">
+        <h3 className="text-xl font-semibold text-left text-white mb-2 group-hover:text-yellow-400 transition-colors duration-300">
           {position.title}
         </h3>
         <div className="flex items-center gap-4 text-gray-300 text-sm">
@@ -161,7 +161,7 @@ const JobCard = ({ position, index, category }) => {
       </div>
 
       <div className={`absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full transform transition-all duration-300 ${isHovered ? 'scale-150 opacity-100' : 'scale-0 opacity-0'}`} />
-    </div>
+    </button>
   );
 };
 
@@ -311,6 +311,7 @@ const Careers = () => {
                       position={position}
                       index={positionIndex}
                       category={category.title}
+                      navigate={navigate}
                     />
                   ))}
                 </div>
