@@ -226,7 +226,7 @@ const AnimatedCounter = () => {
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   />
                 ) : (
-                  <span className="text-4xl lg:text-5xl"
+                  <span className="text-5xl lg:text-6xl"
                     animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   >
