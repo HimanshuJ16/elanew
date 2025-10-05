@@ -6,7 +6,7 @@ const navLinks = [
     link: "/#hero",
   },
   {
-    name: "Our Process",
+    name: "Process",
     link: "/#solutions",
   },
   {

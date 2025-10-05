@@ -113,7 +113,7 @@ const ServiceCard = React.memo(({ service, onClick }) => {
         />
         
         <div className="relative z-10">
-          <div className="flex items-start mb-5">
+          <div className="flex items-center mb-5">
             <motion.div 
               className={`relative w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br ${service.gradient} rounded-xl flex items-center justify-center shadow-lg flex-shrink-0 overflow-hidden`}
               whileHover={{ 
@@ -123,16 +123,16 @@ const ServiceCard = React.memo(({ service, onClick }) => {
               }}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} blur-md opacity-50`} />
-              <IconComponent className="relative w-6 h-6 lg:w-7 lg:h-7 text-white drop-shadow-lg" />
+              <IconComponent className="relative w-6 h-6 lg:w-10 lg:h-10 text-white drop-shadow-lg" />
             </motion.div>
             
-            <div className="ml-3 flex-1 min-w-0">
+            <div className="ml-3 flex-1 min-w-0 flex flex-col justify-center">
               <h3 className="text-base lg:text-lg font-bold text-white mb-1 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-200 transition-all duration-300">
                 {service.title}
               </h3>
-              <p className="text-gray-400 text-xs lg:text-sm font-medium group-hover:text-gray-300 transition-colors">
+              {/* <p className="text-gray-400 text-xs lg:text-sm font-medium group-hover:text-gray-300 transition-colors">
                 {service.subtitle}
-              </p>
+              </p> */}
             </div>
           </div>
           
