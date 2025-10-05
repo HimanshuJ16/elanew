@@ -16,6 +16,7 @@ const navLinks = [
   {
     name: "Careers",
     link: "/careers",
+    badge: "Hiring!",
   },
 ];
 

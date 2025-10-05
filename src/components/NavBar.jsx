@@ -14,10 +14,8 @@ const NavBar = () => {
       setMobileMenuOpen(false);
       const id = link.split('#')[1];
       
-      // If we are not on the homepage, navigate to it first
       if (window.location.pathname !== '/') {
         navigate('/');
-        // Use a timeout to allow the page to change before scrolling
         setTimeout(() => {
           const element = document.getElementById(id);
           if (element) {
@@ -35,7 +33,6 @@ const NavBar = () => {
     }
   };
 
-
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10;
@@ -46,7 +43,6 @@ const NavBar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (mobileMenuOpen && !event.target.closest('.navbar-container')) {
@@ -97,7 +93,7 @@ const NavBar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1" role="navigation" aria-label="Main navigation">
             <ul className="flex items-center space-x-1">
-              {navLinks.map(({ link, name }) => (
+              {navLinks.map(({ link, name, badge }) => (
                 <li key={name}>
                   {link.startsWith('/#') ? (
                     <a 
@@ -106,6 +102,11 @@ const NavBar = () => {
                       className="group relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
                     >
                       <span className="relative z-10 font-medium">{name}</span>
+                      {badge && (
+                        <span className="absolute -top-2 right-0 min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg shadow-blue-500/50 animate-pulse border-2 border-black/20">
+                          {badge}
+                        </span>
+                      )}
                       <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"></div>
                       <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></div>
                     </a>
@@ -115,6 +116,11 @@ const NavBar = () => {
                       className="group relative px-4 py-2 text-gray-300 hover:text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg"
                     >
                       <span className="relative z-10 font-medium">{name}</span>
+                      {badge && (
+                        <span className="z-10 absolute -top-2 -right-3 min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg shadow-blue-500/50 animate-pulse border-2 border-black/20">
+                          {badge}
+                        </span>
+                      )}
                       <div className="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"></div>
                       <div className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></div>
                     </Link>
@@ -124,7 +130,7 @@ const NavBar = () => {
             </ul>
           </nav>
 
-          {/* CTA Button */}
+          {/* CTA Button and Mobile Menu Button */}
           <div className="flex items-center space-x-4">
             <a
               href="#contact"
@@ -140,7 +146,6 @@ const NavBar = () => {
               </span>
             </a>
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden relative p-2 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg transition-colors duration-300"
@@ -168,23 +173,33 @@ const NavBar = () => {
             aria-label="Mobile navigation"
           >
             <ul className="space-y-3">
-              {navLinks.map(({ link, name }) => (
+              {navLinks.map(({ link, name, badge }) => (
                 <li key={name}>
                   {link.startsWith('/#') ? (
                     <a 
                       href={link}
                       onClick={(e) => handleNavClick(e, link)}
-                      className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent"
+                      className="flex justify-between items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent"
                     >
                       <span className="font-medium">{name}</span>
+                      {badge && (
+                        <span className="min-w-[24px] h-6 px-2 flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg shadow-blue-500/30 border-2 border-white/10">
+                          {badge}
+                        </span>
+                      )}
                     </a>
                   ) : (
                     <Link 
                       to={link}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent"
+                      className="flex justify-between items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent"
                     >
                       <span className="font-medium">{name}</span>
+                      {badge && (
+                        <span className="min-w-[24px] h-6 px-2 flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg shadow-blue-500/30 border-2 border-white/10">
+                          {badge}
+                        </span>
+                      )}
                     </Link>
                   )}
                 </li>
