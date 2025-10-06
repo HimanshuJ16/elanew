@@ -145,7 +145,7 @@ const AnimatedCounter = () => {
     <section 
       ref={containerRef}
       id="counter" 
-      className="relative overflow-hidden py-10 lg:py-16 bg-gradient-to-b from-gray-950 via-black/50 to-gray-900"
+      className="relative overflow-hidden py-10 lg:py-0 bg-gradient-to-b from-gray-950 via-black/50 to-gray-900"
     >
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden">
@@ -161,7 +161,7 @@ const AnimatedCounter = () => {
         {/* Header */}
         <div className="text-center mb-16 lg:mb-24">      
           <motion.h2 
-            className="text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100/80 to-pink-100/80 mb-4 leading-tight"
+            className="lg:mt-10 text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100/80 to-pink-100/80 mb-4 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
