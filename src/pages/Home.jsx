@@ -19,7 +19,7 @@ function Home() {
       <>
         <Hero />
         <ShowcaseSection />
-        <LogoShowcase />
+        {/* <LogoShowcase /> */}
         <Solutions />
         <Testimonials />
       </>

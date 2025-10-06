@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger, Flip } from "gsap/all";
 
 import { counterItems } from "../constants";
+import LogoShowcase from "../sections/LogoShowcase";
 
 gsap.registerPlugin(ScrollTrigger, Flip);
 
@@ -258,6 +259,9 @@ const AnimatedCounter = () => {
             </motion.div>
           ))}
         </div>
+      </div>
+      <div className="lg:mt-10">
+        <LogoShowcase/>
       </div>
 
       <style jsx>{`
