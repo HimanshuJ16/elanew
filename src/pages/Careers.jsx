@@ -9,13 +9,17 @@ const jobCategories = [
         title: "Graphic Designer",
         department: "Creative",
         type: "Remote",
-        employment: "Contract"
+        employment: "Contract",
+        pdfLink: "/path/to/graphic-designer-jd.pdf",
+        applyLink: "https://yourcompany.com/apply/graphic-designer"
       },
       {
         title: "Video Editor",
         department: "Creative",
         type: "Remote", 
-        employment: "Contract"
+        employment: "Contract",
+        pdfLink: "/path/to/video-editor-jd.pdf",
+        applyLink: "https://yourcompany.com/apply/video-editor"
       }
     ]
   },
@@ -26,13 +30,17 @@ const jobCategories = [
         title: "Meta Ads Specialist",
         department: "Operations",
         type: "Remote",
-        employment: "Part Time"
+        employment: "Part Time",
+        pdfLink: "/path/to/meta-ads-specialist-jd.pdf",
+        applyLink: "https://yourcompany.com/apply/meta-ads-specialist"
       },
       {
         title: "Videographer",
         department: "Operations",
         type: "On ground",
-        employment: "Contract"
+        employment: "Contract",
+        pdfLink: "/path/to/videographer-jd.pdf",
+        applyLink: "https://yourcompany.com/apply/videographer"
       }
     ]
   }
@@ -134,34 +142,134 @@ const perksAndBenefits = [
   }
 ];
 
-const JobCard = ({ position, index, category, navigate }) => {
-  const [isHovered, setIsHovered] = useState(false);
+const JobDialog = ({ isOpen, onClose, position }) => {
+  if (!isOpen || !position) return null;
 
   return (
-    <button
-      className="group relative bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 hover:bg-gray-800/70 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => navigate("/")}
-      style={{
-        animationDelay: `${index * 150}ms`
-      }}
-    >
-      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-orange-400/5 to-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      />
       
-      <div className="relative z-10">
-        <h3 className="text-xl font-semibold text-left text-white mb-2 group-hover:text-yellow-400 transition-colors duration-300">
-          {position.title}
-        </h3>
-        <div className="flex items-center gap-4 text-gray-300 text-sm">
-          <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.department}</span>
-          <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.type}</span>
-          <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.employment}</span>
+      {/* Dialog Panel */}
+      <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 border border-yellow-400/30 rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-2xl transform transition-all">
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+          aria-label="Close dialog"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Dialog Content */}
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-3xl font-bold text-white mb-2">{position.title}</h2>
+            <div className="flex items-center gap-3 text-gray-300 text-sm">
+              <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.department}</span>
+              <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.type}</span>
+              <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.employment}</span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="space-y-3">
+            {/* Download PDF Button */}
+            <a
+              href={position.pdfLink}
+              download
+              className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download Job Description (PDF)
+            </a>
+
+            {/* Apply Link Button */}
+            {/* <a
+              href={position.applyLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-400 hover:to-yellow-400 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Apply Now
+            </a> */}
+
+            {/* Additional Links (Optional) */}
+            {/* <div className="pt-4 border-t border-gray-700">
+              <p className="text-gray-400 text-sm mb-3">More Information:</p>
+              <div className="space-y-2">
+                <a
+                  href="https://yourcompany.com/about"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-yellow-400 hover:text-yellow-300 text-sm transition-colors"
+                >
+                  → Learn more about our company
+                </a>
+                <a
+                  href="https://yourcompany.com/culture"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-yellow-400 hover:text-yellow-300 text-sm transition-colors"
+                >
+                  → Explore our company culture
+                </a>
+              </div>
+            </div> */}
+          </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      <div className={`absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full transform transition-all duration-300 ${isHovered ? 'scale-150 opacity-100' : 'scale-0 opacity-0'}`} />
-    </button>
+const JobCard = ({ position, index }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        className="group relative bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 hover:bg-gray-800/70 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl w-full text-left"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={() => setIsDialogOpen(true)}
+        style={{
+          animationDelay: `${index * 150}ms`
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-orange-400/5 to-yellow-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+        
+        <div className="relative z-10">
+          <h3 className="text-xl font-semibold text-left text-white mb-2 group-hover:text-yellow-400 transition-colors duration-300">
+            {position.title}
+          </h3>
+          <div className="flex items-center gap-4 text-gray-300 text-sm">
+            <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.department}</span>
+            <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.type}</span>
+            <span className="bg-gray-700/50 px-3 py-1 rounded-full">{position.employment}</span>
+          </div>
+        </div>
+
+        <div className={`absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full transform transition-all duration-300 ${isHovered ? 'scale-150 opacity-100' : 'scale-0 opacity-0'}`} />
+      </button>
+
+      <JobDialog 
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        position={position}
+      />
+    </>
   );
 };
 
@@ -185,10 +293,7 @@ const ValueCard = ({ value, index }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Animated background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/10 via-orange-400/5 to-yellow-300/8 opacity-0 group-hover:opacity-100 transition-opacity duration-600 rounded-3xl" />
-      
-      {/* Golden corner accent */}
       <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-yellow-400/20 to-transparent rounded-tr-3xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
       
       <div className="relative z-10">
@@ -203,11 +308,8 @@ const ValueCard = ({ value, index }) => {
         </p>
       </div>
 
-      {/* Floating dots animation */}
       <div className={`absolute top-6 right-6 w-3 h-3 bg-yellow-400 rounded-full transform transition-all duration-500 ${isHovered ? 'scale-150 opacity-100' : 'scale-0 opacity-0'}`} />
       <div className={`absolute top-10 right-10 w-2 h-2 bg-orange-400 rounded-full transform transition-all duration-700 ${isHovered ? 'scale-125 opacity-80' : 'scale-0 opacity-0'}`} />
-      
-      {/* Border glow effect */}
       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-600 blur-sm" />
     </div>
   );
@@ -293,10 +395,6 @@ const Careers = () => {
       {/* Open Positions Section */}
       <section className="relative z-10 py-20">
         <div className="container mx-auto px-4">
-          {/* <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-            Open positions
-          </h2> */}
-
           <div className="max-w-6xl mx-auto space-y-12">
             {jobCategories.map((category, categoryIndex) => (
               <div key={categoryIndex} className="space-y-6">
@@ -310,8 +408,6 @@ const Careers = () => {
                       key={positionIndex}
                       position={position}
                       index={positionIndex}
-                      category={category.title}
-                      navigate={navigate}
                     />
                   ))}
                 </div>
