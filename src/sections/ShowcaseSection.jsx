@@ -455,6 +455,8 @@ const AppShowcase = () => {
   const sectionRef = useRef(null);
   const carouselRef = useRef(null);
   const cardsRef = useRef([]);
+  const autoplayTweenRef = useRef(null);
+  const isDraggingRef = useRef(false);
 
   useGSAP(() => {
     const carousel = carouselRef.current;
@@ -469,7 +471,7 @@ const AppShowcase = () => {
       return -(carouselWidth - containerWidth);
     };
 
-    // Create draggable carousel with inertia
+    // Create draggable carousel with improved animation handling
     const draggableInstance = Draggable.create(carousel, {
       type: "x",
       bounds: {
@@ -481,40 +483,118 @@ const AppShowcase = () => {
       throwProps: true,
       snap: {
         x: (endValue) => {
-          // Snap to nearest card
-          const cardWidth = cards[0].offsetWidth + 32; // card width + gap
+          const cardWidth = cards[0].offsetWidth + 32;
           return Math.round(endValue / cardWidth) * cardWidth;
         }
       },
-      onDrag: function() {
-        // Add subtle scale effect while dragging
+      onDragStart: function() {
+        isDraggingRef.current = true;
+        
+        // Kill autoplay from current position
+        if (autoplayTweenRef.current) {
+          autoplayTweenRef.current.kill();
+        }
+        
+        // Animate cards on drag start from current state
         gsap.to(cards, {
           scale: 0.95,
-          duration: 0.3
+          duration: 0.3,
+          ease: "power2.out",
+          overwrite: "auto"
+        });
+      },
+      onDrag: function() {
+        // Progressive scale effect based on drag velocity
+        const velocity = Math.abs(this.getVelocity("x"));
+        const scaleFactor = gsap.utils.clamp(0.92, 0.98, 1 - velocity / 10000);
+        
+        gsap.to(cards, {
+          scale: scaleFactor,
+          duration: 0.2,
+          ease: "power1.out",
+          overwrite: "auto"
         });
       },
       onDragEnd: function() {
+        isDraggingRef.current = false;
+        
+        // Restore cards with bounce effect
+        gsap.to(cards, {
+          scale: 1,
+          duration: 0.6,
+          ease: "back.out(1.4)",
+          overwrite: "auto"
+        });
+        
+        // Restart autoplay from current position
+        startAutoplay();
+      },
+      onThrowUpdate: function() {
+        // Keep cards slightly scaled during momentum scroll
+        gsap.to(cards, {
+          scale: 0.97,
+          duration: 0.2,
+          ease: "none",
+          overwrite: "auto"
+        });
+      },
+      onThrowComplete: function() {
+        // Final restoration after momentum stops
         gsap.to(cards, {
           scale: 1,
           duration: 0.5,
-          ease: "back.out(1.2)"
+          ease: "back.out(1.2)",
+          overwrite: "auto"
         });
       }
     })[0];
 
-    // Auto-play carousel (optional - remove if you don't want auto-scroll)
-    let autoplayTween = gsap.to(carousel, {
-      x: getMaxX(),
-      duration: 30,
-      ease: "none",
-      repeat: -1,
-      yoyo: true,
-      paused: true
-    });
+    // Autoplay function that starts from current position
+    const startAutoplay = () => {
+      if (autoplayTweenRef.current) {
+        autoplayTweenRef.current.kill();
+      }
+      
+      const currentX = gsap.getProperty(carousel, "x");
+      const targetX = getMaxX();
+      
+      // Calculate remaining distance and duration
+      const remainingDistance = Math.abs(targetX - currentX);
+      const totalDistance = Math.abs(targetX);
+      const baseDuration = 30;
+      const duration = (remainingDistance / totalDistance) * baseDuration;
+      
+      autoplayTweenRef.current = gsap.to(carousel, {
+        x: targetX,
+        duration: duration,
+        ease: "none",
+        onComplete: () => {
+          // Reverse direction
+          autoplayTweenRef.current = gsap.to(carousel, {
+            x: 0,
+            duration: baseDuration,
+            ease: "none",
+            onComplete: startAutoplay
+          });
+        }
+      });
+    };
+
+    // Start initial autoplay
+    startAutoplay();
 
     // Pause autoplay on hover
-    carousel.addEventListener("mouseenter", () => autoplayTween.pause());
-    carousel.addEventListener("mouseleave", () => autoplayTween.play());
+    carousel.addEventListener("mouseenter", () => {
+      if (autoplayTweenRef.current && !isDraggingRef.current) {
+        autoplayTweenRef.current.pause();
+      }
+    });
+    
+    carousel.addEventListener("mouseleave", () => {
+      if (autoplayTweenRef.current && !isDraggingRef.current) {
+        autoplayTweenRef.current.play();
+      }
+    });
 
     // Individual card hover interactions
     cards.forEach((card) => {
@@ -530,7 +610,8 @@ const AppShowcase = () => {
           scale: 1.05,
           rotationY: 2,
           duration: 0.5,
-          ease: "power2.out"
+          ease: "power2.out",
+          overwrite: "auto"
         });
         
         if (icon) {
@@ -538,7 +619,8 @@ const AppShowcase = () => {
             rotation: 360,
             scale: 1.2,
             duration: 0.6,
-            ease: "back.out(2)"
+            ease: "back.out(2)",
+            overwrite: "auto"
           });
         }
 
@@ -546,7 +628,8 @@ const AppShowcase = () => {
           gsap.to(badge, {
             scale: 1.1,
             duration: 0.3,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
 
@@ -556,7 +639,8 @@ const AppShowcase = () => {
             backgroundColor: "rgba(31, 41, 55, 0.9)",
             duration: 0.4,
             stagger: 0.1,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
 
@@ -564,7 +648,8 @@ const AppShowcase = () => {
           gsap.to(accentLine, {
             scaleX: 1,
             duration: 0.5,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
 
@@ -573,7 +658,8 @@ const AppShowcase = () => {
             opacity: 1,
             scale: 1.5,
             duration: 0.6,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
       });
@@ -584,7 +670,8 @@ const AppShowcase = () => {
           scale: 1,
           rotationY: 0,
           duration: 0.5,
-          ease: "power2.out"
+          ease: "power2.out",
+          overwrite: "auto"
         });
         
         if (icon) {
@@ -592,7 +679,8 @@ const AppShowcase = () => {
             rotation: 0,
             scale: 1,
             duration: 0.5,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
 
@@ -600,7 +688,8 @@ const AppShowcase = () => {
           gsap.to(badge, {
             scale: 1,
             duration: 0.3,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
 
@@ -610,7 +699,8 @@ const AppShowcase = () => {
             backgroundColor: "rgba(31, 41, 55, 0.5)",
             duration: 0.4,
             stagger: 0.05,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
 
@@ -618,7 +708,8 @@ const AppShowcase = () => {
           gsap.to(accentLine, {
             scaleX: 0,
             duration: 0.5,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
 
@@ -627,7 +718,8 @@ const AppShowcase = () => {
             opacity: 0,
             scale: 1,
             duration: 0.6,
-            ease: "power2.out"
+            ease: "power2.out",
+            overwrite: "auto"
           });
         }
       });
@@ -639,6 +731,11 @@ const AppShowcase = () => {
         minX: getMaxX(),
         maxX: 0
       });
+      
+      // Restart autoplay from new position after resize
+      if (autoplayTweenRef.current) {
+        startAutoplay();
+      }
     };
 
     window.addEventListener("resize", handleResize);
@@ -646,7 +743,9 @@ const AppShowcase = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
       draggableInstance.kill();
-      autoplayTween.kill();
+      if (autoplayTweenRef.current) {
+        autoplayTweenRef.current.kill();
+      }
     };
   }, { scope: sectionRef });
 
@@ -850,7 +949,7 @@ const AppShowcase = () => {
           <h2 className="section-title text-5xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent leading-tight">
             Who We Do It For
           </h2>
-          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+          <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed hidden lg:block">
             Tailored solutions for diverse industries, driving growth through innovative marketing strategies.
           </p>
         </div>
