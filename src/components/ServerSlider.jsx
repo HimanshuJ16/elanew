@@ -127,7 +127,7 @@ const ServiceCard = React.memo(({ service, onClick }) => {
             </motion.div>
             
             <div className="ml-3 flex-1 min-w-0 flex flex-col justify-center">
-              <h3 className="text-base lg:text-lg font-bold text-white mb-1 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-200 transition-all duration-300">
+              <h3 className="text-base tracking-wide lg:text-lg font-bold text-white mb-1 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-200 transition-all duration-300">
                 {service.title}
               </h3>
               {/* <p className="text-gray-400 text-xs lg:text-sm font-medium group-hover:text-gray-300 transition-colors">
