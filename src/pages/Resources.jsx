@@ -122,12 +122,12 @@ We’re launching free webinars, videos, case studies and toolkits to teach what
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-gray-400">
               <div className="flex -space-x-2 sm:-space-x-3">
                 {[1, 2, 3, 4].map((i) => (
-                  <div
+                  <img
                     key={i}
-                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 border-2 border-gray-800 flex items-center justify-center text-white text-xs sm:text-sm font-semibold"
-                  >
-                    {String.fromCharCode(64 + i)}
-                  </div>
+                    src={`images/${i}.jpg`}
+                    alt={`Avatar ${i}`}
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-800"
+                  />
                 ))}
               </div>
               <span className="text-xs sm:text-sm text-center">

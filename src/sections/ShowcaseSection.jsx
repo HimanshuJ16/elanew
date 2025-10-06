@@ -959,7 +959,7 @@ const AppShowcase = () => {
         {/* Title section */}
         <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-28">
           <h2 className="section-title text-4xl lg:text-6xl xl:text-7xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent leading-tight px-4">
-            Who We Do It For
+            Industries We Serve
           </h2>
           <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed px-4 hidden md:block">
             Tailored solutions for diverse industries, driving growth through innovative marketing strategies.
