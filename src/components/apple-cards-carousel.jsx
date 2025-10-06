@@ -639,7 +639,7 @@ export const Carousel = ({ items, initialScroll = 0 }) => {
     target: targetRef,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["10%", "-30%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["10%", "-25%"]);
 
   const containerVariants = {
     hidden: { opacity: 0, y: 50 },

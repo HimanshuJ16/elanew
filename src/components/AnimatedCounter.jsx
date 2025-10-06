@@ -58,10 +58,10 @@ const AnimatedCounter = () => {
           numberElement.innerText = value.toLocaleString();
         },
         onComplete: () => {
-          numberElement.innerText = `${item.value.toLocaleString()}${item.suffix}`;
+          numberElement.innerText = `${item.value.toLocaleString()}`;
           createSparkleEffect(numberElement);
         }
-      }, "-=1.4"); // Overlap with overlay animation
+      }, "-=1.4");
 
       // Attach ScrollTrigger to the timeline with stagger
       ScrollTrigger.create({
@@ -126,10 +126,10 @@ const AnimatedCounter = () => {
 
   const getIconForItem = (index) => {
     const icons = [
-      "/images/impressions.png", // Projects
-      "👥",  // Clients
-      "/images/creatives.png",  // Campaigns
-      "🌍"   // Growth
+      "/images/impressions.png",
+      "/images/creatives.png",
+      "👥",
+      "🌍"
     ];
     return icons[index % icons.length];
   };
@@ -170,7 +170,7 @@ const AnimatedCounter = () => {
           </motion.h2>
           
           <motion.p 
-            className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed"
+            className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed hidden lg:block"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -181,12 +181,12 @@ const AnimatedCounter = () => {
         </div>
 
         {/* Simple Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {enhancedCounterItems.map((item, index) => (
             <motion.div
               key={index}
               ref={(el) => el && (counterRefs.current[index] = el)}
-              className="group text-center relative"
+              className="group text-center relative flex flex-col items-center"
               initial={{ 
                 opacity: 0, 
                 y: 50
@@ -222,32 +222,32 @@ const AnimatedCounter = () => {
                   <img src={item.icon}
                     alt={item.label + " icon"}
                     className="w-16 h-16 mx-auto"
-                    animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   />
                 ) : (
-                  <span className="text-5xl lg:text-6xl"
-                    animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  >
+                  <span className="text-5xl lg:text-6xl">
                     {item.icon}
                   </span>
                 )}
               </div>
 
               {/* Counter number */}
-              <div className="mb-4 relative z-10">
+              <div className="mb-4 relative z-10 flex items-center justify-center">
                 <div className="counter-number text-white text-4xl lg:text-6xl font-black mb-2
                   bg-gradient-to-r from-white via-purple-100/90 to-pink-100/90 bg-clip-text
                   group-hover:from-purple-400/90 group-hover:via-purple-500/90 group-hover:to-pink-400/90">
                   0
                 </div>
+                <div className="text-white text-4xl lg:text-6xl font-black mb-2
+                  bg-gradient-to-r from-white via-purple-100/90 to-pink-100/90 bg-clip-text
+                  group-hover:from-purple-400/90 group-hover:via-purple-500/90 group-hover:to-pink-400/90">
+                  {item.suffix}
+                </div>
               </div>
 
               {/* Label */}
               <motion.p 
-                className="text-gray-300 text-base lg:text-lg font-medium
-                  group-hover:text-white/90 transition-colors duration-300"
+                className="text-gray-300 text-base lg:text-lg font-medium text-center
+                  group-hover:text-white/90 transition-colors duration-300 px-2"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}

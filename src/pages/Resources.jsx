@@ -75,7 +75,8 @@ const Resources = () => {
                 Join the <span className="text-blue-400">waitlist</span>
               </h1>
               <p className="text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed">
-                Get early access and stay informed about our launch.
+                
+We’re launching free webinars, videos, case studies and toolkits to teach what we do before you join the company, either as a client or a team member
               </p>
             </div>
 
@@ -130,7 +131,7 @@ const Resources = () => {
                 ))}
               </div>
               <span className="text-xs sm:text-sm text-center">
-                Join <span className="text-white font-semibold">15,725</span> + others on the waitlist
+                Join <span className="text-white font-semibold">578</span> + others on the waitlist
               </span>
             </div>
           </div>

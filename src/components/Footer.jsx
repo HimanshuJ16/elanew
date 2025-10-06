@@ -79,7 +79,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm font-medium">Email</p>
-                  <p className="text-white font-semibold group-hover:text-blue-300 transition-colors duration-300">info@elation.digital</p>
+                  <p className="text-white font-semibold group-hover:text-blue-300 transition-colors duration-300">hi@elation.agency</p>
                 </div>
               </a>
 

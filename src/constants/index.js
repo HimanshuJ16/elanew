@@ -33,8 +33,8 @@ const words = [
 
 const counterItems = [
   { value: 187, suffix: "M+", label: "Impressions Generated" },
-  { value: 83, suffix: "+", label: "Accounts Managed" },
   { value: 670, suffix: "+", label: "Creatives Delivered" },
+  { value: 83, suffix: "+", label: "Accounts Managed" },
   { value: 5, suffix: "+", label: "Countries" },
 ];
 

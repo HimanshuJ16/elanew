@@ -135,7 +135,7 @@ const NavBar = () => {
             <a
               href="#contact"
               aria-label="Book a call"
-              className="group relative inline-flex h-11 lg:h-12 overflow-hidden rounded-full p-[2px] focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 hover:scale-105"
+              className="hidden lg:block group relative h-11 lg:h-12 overflow-hidden rounded-full p-[2px] focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 hover:scale-105"
             >
               <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_25%,#FF6B6B_50%,#4ECDC4_75%,#E2CBFF_100%)]" />
               <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-black/90 backdrop-blur-xl px-5 lg:px-6 py-1 text-sm lg:text-base font-semibold text-white transition-all duration-300 group-hover:bg-gray-900/90">
@@ -204,6 +204,19 @@ const NavBar = () => {
                   )}
                 </li>
               ))}
+              <a
+              href="#contact"
+              aria-label="Book a call"
+              className="group relative inline-flex h-11 lg:h-12 overflow-hidden rounded-full p-[2px] focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 hover:scale-105"
+            >
+              <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_25%,#FF6B6B_50%,#4ECDC4_75%,#E2CBFF_100%)]" />
+              <span className="inline-flex h-full w-full items-center justify-center rounded-full bg-black/90 backdrop-blur-xl px-5 lg:px-6 py-1 text-sm lg:text-base font-semibold text-white transition-all duration-300 group-hover:bg-gray-900/90">
+                <span className="mr-2">Book a call</span>
+                <svg className="w-4 h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
+            </a>
             </ul>
           </nav>
         </div>

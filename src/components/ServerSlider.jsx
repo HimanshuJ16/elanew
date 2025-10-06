@@ -123,7 +123,7 @@ const ServiceCard = React.memo(({ service, onClick }) => {
               }}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} blur-md opacity-50`} />
-              <IconComponent className="relative w-6 h-6 lg:w-10 lg:h-10 text-white drop-shadow-lg" />
+              <IconComponent className="relative w-8 h-8 lg:w-10 lg:h-10 text-white drop-shadow-lg" />
             </motion.div>
             
             <div className="ml-3 flex-1 min-w-0 flex flex-col justify-center">
@@ -440,13 +440,13 @@ const ServiceShowcase = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-pink-200 animate-gradient">
+            <span className="text-transparent text-4xl lg:text-6xl bg-clip-text bg-gradient-to-r from-white via-purple-200 to-pink-200 animate-gradient">
               Our Services
             </span>
           </motion.h2>
           
           <motion.p 
-            className="text-gray-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed"
+            className="text-gray-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed hidden lg:block"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}

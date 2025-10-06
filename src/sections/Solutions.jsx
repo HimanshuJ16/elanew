@@ -228,7 +228,7 @@ const ProcessCard = ({ card, index, setActiveIndex, innerRef }) => {
         </motion.div>
 
         <motion.p 
-          className="mb-8 text-neutral-300 text-md leading-relaxed"
+          className="mb-8 text-neutral-300 text-md leading-relaxed hidden lg:block"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}

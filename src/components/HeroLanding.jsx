@@ -83,7 +83,7 @@ function HeroLanding({ isLoadingComplete = true }) {
   }, [shouldAnimate]);
 
   return (
-    <section ref={containerRef} className="relative h-[80vh] lg:h-screen flex items-center justify-center overflow-hidden">
+    <section ref={containerRef} className="relative h-[100vh] flex items-center justify-center overflow-hidden">
       <motion.div
         className="container relative z-10 px-6 mx-auto max-w-7xl"
         variants={containerAnimation}
@@ -182,9 +182,9 @@ function HeroLanding({ isLoadingComplete = true }) {
           </motion.div>
 
           <p className="text-sm md:text-md lg:text-[1rem] text-white/70 max-w-2xl leading-relaxed font-light mt-5">
-           Elation’s method drives results across the entire funnel—capturing attention, strengthening recall, and converting revenue.{" "}
+            We drive results across the funnel, capturing attention, boosting recall, and converting revenue.{" "}
             <span className="text-white/90 font-medium bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text">
-              We combine high-impact advertising with micro-campaigns and authentic UGC to deliver exceptional ROAS, build customer loyalty, and ensure sustainable long-term growth.
+              We blend high-impact ads with authentic UGC and micro-campaigns to deliver strong ROAS, loyalty, and long-term growth.
             </span>
           </p>
 

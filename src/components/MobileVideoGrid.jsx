@@ -2,29 +2,23 @@ import { motion } from "framer-motion";
 
 const MobileVideoGrid = () => {
   const videos = [
-    { 
-      src: "/videos/1.mp4",
-      poster: ""
+    {
+      src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211866/4_kzmzd9.mp4",
     },
-    { 
-      src: "/videos/2.mp4",
-      poster: ""
+    {
+      src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211862/2_ync69k.mp4",
     },
-    { 
-      src: "/videos/3.mp4",
-      poster: ""
+    {
+      src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211865/3_n0kpa3.mp4",
     },
-    { 
-      src: "/videos/4.mp4",
-      poster: ""
+    {
+      src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759309821/5_kcj99y.mp4",
     },
-    { 
-      src: "/videos/5.mp4",
-      poster: ""
+    {
+      src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759310147/1_hacfcs.mp4",
     },
-    { 
-      src: "/videos/6.mp4",
-      poster: ""
+    {
+      src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211873/6_lhnkno.mp4",
     },
   ];
 
