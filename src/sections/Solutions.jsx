@@ -264,7 +264,7 @@ const ProcessCard = ({ card, index, setActiveIndex, innerRef }) => {
       </div>
 
       <motion.div
-        className={`absolute top-6 right-6 w-12 h-12 rounded-full bg-gradient-to-br ${card.color} flex items-center justify-center font-bold text-white text-lg shadow-lg`}
+        className={`absolute top-5 right-5 lg:top-6 lg:right-6 w-6 h-6 lg:w-12 lg:h-12 rounded-full bg-gradient-to-br ${card.color} flex items-center justify-center font-bold text-white text-lg shadow-lg`}
         initial={{ scale: 0, rotate: -180 }}
         whileInView={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.3 }}
