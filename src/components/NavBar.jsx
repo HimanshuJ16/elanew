@@ -146,6 +146,21 @@ const NavBar = () => {
               </span>
             </a>
 
+            <div className="lg:hidden">
+              <Link 
+                to="/careers"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex justify-between items-center px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent"
+              >
+                <span className="font-medium relative">
+                  Careers
+                  <span className="absolute -top-3 -right-6 min-w-[20px] h-5 px-1.5 flex items-center justify-center text-[10px] font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-lg shadow-blue-500/50 animate-pulse border-2 border-black/20">
+                    Hiring
+                  </span>
+                </span>
+              </Link>
+            </div>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden relative p-2 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-transparent rounded-lg transition-colors duration-300"
@@ -164,7 +179,7 @@ const NavBar = () => {
         {/* Mobile Navigation */}
         <div 
           className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+            mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
           <nav 
