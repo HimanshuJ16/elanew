@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from "gsap/Draggable";
@@ -59,10 +59,8 @@ const AppShowcase = () => {
   const sectionRef = useRef(null);
   const carouselRef = useRef(null);
   const cardsRef = useRef([]);
-  const autoplayTweenRef = useRef(null);
-  const isDraggingRef = useRef(false);
   const scrollTweenRef = useRef(null);
-  const draggableInstanceRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useGSAP(() => {
     const carousel = carouselRef.current;
@@ -80,14 +78,8 @@ const AppShowcase = () => {
       return -(carouselWidth - containerWidth);
     };
 
-    // ============ DESKTOP: Horizontal Scroll on Wheel ============
+    // ============ DESKTOP ONLY: Horizontal Scroll on Wheel ============
     if (!isMobile) {
-      // Kill autoplay for desktop
-      if (autoplayTweenRef.current) {
-        autoplayTweenRef.current.kill();
-        autoplayTweenRef.current = null;
-      }
-
       // Create ScrollTrigger for horizontal scroll
       scrollTweenRef.current = gsap.to(carousel, {
         x: getMaxX(),
@@ -234,168 +226,117 @@ const AppShowcase = () => {
         card.addEventListener('mouseenter', handleCardMouseEnter);
         card.addEventListener('mouseleave', handleCardMouseLeave);
       });
-    }
-
-    // ============ MOBILE: Draggable with Autoplay ============
-    if (isMobile) {
-      // Create draggable carousel with improved animation handling
-      draggableInstanceRef.current = Draggable.create(carousel, {
-        type: "x",
-        bounds: {
-          minX: getMaxX(),
-          maxX: 0
-        },
-        inertia: true,
-        edgeResistance: 0.65,
-        throwProps: true,
-        snap: {
-          x: (endValue) => {
-            const cardWidth = cards[0].offsetWidth + 16;
-            return Math.round(endValue / cardWidth) * cardWidth;
-          }
-        },
-        onDragStart: function() {
-          isDraggingRef.current = true;
-          
-          // Kill autoplay from current position
-          if (autoplayTweenRef.current) {
-            autoplayTweenRef.current.kill();
-          }
-          
-          // Animate cards on drag start from current state
-          gsap.to(cards, {
-            scale: 0.95,
-            duration: 0.3,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        },
-        onDrag: function() {
-          // Progressive scale effect based on drag velocity
-          const velocity = Math.abs(this.getVelocity("x"));
-          const scaleFactor = gsap.utils.clamp(0.92, 0.98, 1 - velocity / 10000);
-          
-          gsap.to(cards, {
-            scale: scaleFactor,
-            duration: 0.2,
-            ease: "power1.out",
-            overwrite: "auto"
-          });
-        },
-        onDragEnd: function() {
-          isDraggingRef.current = false;
-          
-          // Restore cards with bounce effect
-          gsap.to(cards, {
-            scale: 1,
-            duration: 0.6,
-            ease: "back.out(1.4)",
-            overwrite: "auto"
-          });
-          
-          // Restart autoplay from current position
-          startAutoplay();
-        },
-        onThrowUpdate: function() {
-          // Keep cards slightly scaled during momentum scroll
-          gsap.to(cards, {
-            scale: 0.97,
-            duration: 0.2,
-            ease: "none",
-            overwrite: "auto"
-          });
-        },
-        onThrowComplete: function() {
-          // Final restoration after momentum stops
-          gsap.to(cards, {
-            scale: 1,
-            duration: 0.5,
-            ease: "back.out(1.2)",
-            overwrite: "auto"
-          });
-        }
-      })[0];
-
-      // Autoplay function for mobile
-      const startAutoplay = () => {
-        if (autoplayTweenRef.current) {
-          autoplayTweenRef.current.kill();
-        }
-        
-        const currentX = gsap.getProperty(carousel, "x");
-        const targetX = getMaxX();
-        
-        // Calculate remaining distance and duration
-        const remainingDistance = Math.abs(targetX - currentX);
-        const totalDistance = Math.abs(targetX);
-        const baseDuration = 30;
-        const duration = (remainingDistance / totalDistance) * baseDuration;
-        
-        autoplayTweenRef.current = gsap.to(carousel, {
-          x: targetX,
-          duration: duration,
-          ease: "none",
-          onComplete: () => {
-            // Reverse direction
-            autoplayTweenRef.current = gsap.to(carousel, {
-              x: 0,
-              duration: baseDuration,
-              ease: "none",
-              onComplete: startAutoplay
-            });
-          }
-        });
+    } else {
+      // ============ MOBILE: Center first card on load ============
+      const centerCard = () => {
+        if (cards.length === 0) return;
+        const containerWidth = carousel.parentElement.offsetWidth;
+        const cardWidth = cards[0].offsetWidth;
+        const offset = (containerWidth - cardWidth) / 2;
+        gsap.set(carousel, { x: offset });
       };
-
-      // Start initial autoplay on mobile
-      startAutoplay();
+      
+      centerCard();
     }
 
     // Update bounds on window resize
     const handleResize = () => {
-      const newIsMobile = window.innerWidth < 1024;
-      
-      // Add null check for scrollTweenRef
       if (scrollTweenRef.current && scrollTweenRef.current.scrollTrigger) {
         scrollTweenRef.current.scrollTrigger.refresh();
-      }
-      
-      // Add null check for draggableInstanceRef
-      if (draggableInstanceRef.current) {
-        draggableInstanceRef.current.applyBounds({
-          minX: getMaxX(),
-          maxX: 0
-        });
-      }
-      
-      // Restart autoplay on mobile after resize
-      if (newIsMobile && autoplayTweenRef.current) {
-        autoplayTweenRef.current.kill();
       }
     };
 
     window.addEventListener("resize", handleResize);
 
-    // Cleanup function with proper null checks
+    // Cleanup function
     return () => {
       window.removeEventListener("resize", handleResize);
       
-      // Check if draggableInstanceRef exists before killing
-      if (draggableInstanceRef.current) {
-        draggableInstanceRef.current.kill();
-      }
-      
-      // Check if autoplayTweenRef exists before killing
-      if (autoplayTweenRef.current) {
-        autoplayTweenRef.current.kill();
-      }
-      
-      // Check if scrollTweenRef and its scrollTrigger exist before killing
       if (scrollTweenRef.current && scrollTweenRef.current.scrollTrigger) {
         scrollTweenRef.current.scrollTrigger.kill();
       }
     };
   }, { scope: sectionRef });
+
+  // Mobile arrow navigation handlers with centering
+  const handlePrevCard = () => {
+    const carousel = carouselRef.current;
+    const cards = cardsRef.current;
+    
+    if (!carousel || cards.length === 0 || currentIndex === 0) return;
+    
+    const containerWidth = carousel.parentElement.offsetWidth;
+    const cardWidth = cards[0].offsetWidth + 16; // card width + gap
+    const offset = (containerWidth - cards[0].offsetWidth) / 2; // Center offset
+    const newIndex = currentIndex - 1;
+    const targetX = offset - (newIndex * cardWidth);
+    
+    // Animate cards scale effect
+    gsap.to(cards, {
+      scale: 0.95,
+      duration: 0.2,
+      ease: "power2.out",
+      onComplete: () => {
+        gsap.to(cards, {
+          scale: 1,
+          duration: 0.4,
+          ease: "back.out(1.4)"
+        });
+      }
+    });
+    
+    gsap.to(carousel, {
+      x: targetX,
+      duration: 0.5,
+      ease: "power2.out",
+      onComplete: () => {
+        setCurrentIndex(newIndex);
+      }
+    });
+  };
+
+  const handleNextCard = () => {
+    const carousel = carouselRef.current;
+    const cards = cardsRef.current;
+    
+    if (!carousel || cards.length === 0) return;
+    
+    // Calculate max index
+    const containerWidth = carousel.parentElement.offsetWidth;
+    const cardWidth = cards[0].offsetWidth + 16;
+    const carouselWidth = carousel.scrollWidth;
+    const offset = (containerWidth - cards[0].offsetWidth) / 2; // Center offset
+    const maxScroll = carouselWidth - containerWidth + offset;
+    const maxIndex = Math.floor(maxScroll / cardWidth);
+    
+    if (currentIndex >= industries.length - 1) return;
+    
+    const newIndex = currentIndex + 1;
+    const targetX = offset - (newIndex * cardWidth);
+    
+    // Animate cards scale effect
+    gsap.to(cards, {
+      scale: 0.95,
+      duration: 0.2,
+      ease: "power2.out",
+      onComplete: () => {
+        gsap.to(cards, {
+          scale: 1,
+          duration: 0.4,
+          ease: "back.out(1.4)"
+        });
+      }
+    });
+    
+    gsap.to(carousel, {
+      x: targetX,
+      duration: 0.5,
+      ease: "power2.out",
+      onComplete: () => {
+        setCurrentIndex(newIndex);
+      }
+    });
+  };
 
   const industries = [
     { type: "d2c", title: "D2C Brands", tag: "Consultancy", color: "purple", challenge: "Connecting with Gen Z through content, distribution, and ad funnels.", solution: "End-to-end marketing strategy, sharp creatives, influencer/UGC integration, and performance campaigns." },
@@ -507,7 +448,7 @@ const AppShowcase = () => {
     return (
       <div 
         ref={(el) => (cardsRef.current[index] = el)}
-        className={`industry-card group relative overflow-hidden bg-gradient-to-br from-gray-900/90 via-gray-800/60 to-gray-900/90 backdrop-blur-2xl border border-gray-700/50 rounded-2xl sm:rounded-3xl p-4 sm:p-5 lg:p-7 transition-all duration-500 ${colorClasses.border} ${colorClasses.shadow} cursor-grab active:cursor-grabbing flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px] lg:w-[400px]`}
+        className={`industry-card group relative overflow-hidden bg-gradient-to-br from-gray-900/90 via-gray-800/60 to-gray-900/90 backdrop-blur-2xl border border-gray-700/50 rounded-2xl sm:rounded-3xl p-4 sm:p-5 lg:p-7 transition-all duration-500 ${colorClasses.border} ${colorClasses.shadow} lg:cursor-grab lg:active:cursor-grabbing flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px] lg:w-[400px]`}
         style={{ 
           transformStyle: "preserve-3d",
           perspective: "1000px"
@@ -576,6 +517,10 @@ const AppShowcase = () => {
     );
   };
 
+  // Calculate if we're at the boundaries for button states
+  const isAtStart = currentIndex === 0;
+  const isAtEnd = currentIndex >= industries.length - 1;
+
   return (
     <section 
       id="work" 
@@ -602,19 +547,63 @@ const AppShowcase = () => {
           </p>
         </div>
 
-        {/* Carousel Container */}
-        <div className="carousel-container relative overflow-hidden">
-          <div 
-            ref={carouselRef}
-            className="carousel-track flex gap-4 sm:gap-6 lg:gap-8 py-4"
+        {/* Carousel Container with Arrow Navigation */}
+        <div className="relative">
+          {/* Mobile Arrow Buttons */}
+          <button
+            onClick={handlePrevCard}
+            disabled={isAtStart}
+            className={`lg:hidden fixed left-4 sm:left-6 top-1/2 -translate-y-1/2 z-[100] w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-gray-800 to-gray-900 backdrop-blur-md border-2 ${
+              isAtStart ? 'border-gray-700/30' : 'border-purple-500/50'
+            } rounded-full flex items-center justify-center transition-all duration-300 shadow-2xl ${
+              isAtStart
+                ? 'opacity-40 cursor-not-allowed' 
+                : 'opacity-100 hover:scale-110 hover:shadow-purple-500/50 active:scale-95'
+            }`}
+            style={{ 
+              boxShadow: isAtStart ? 'none' : '0 0 30px rgba(168, 85, 247, 0.4)' 
+            }}
+            aria-label="Previous card"
           >
-            {industries.map((industry, index) => (
-              <IndustryCard 
-                key={`${industry.type}-${index}`}
-                industry={industry} 
-                index={index}
-              />
-            ))}
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <button
+            onClick={handleNextCard}
+            disabled={isAtEnd}
+            className={`lg:hidden fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-[100] w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-gray-800 to-gray-900 backdrop-blur-md border-2 ${
+              isAtEnd ? 'border-gray-700/30' : 'border-purple-500/50'
+            } rounded-full flex items-center justify-center transition-all duration-300 shadow-2xl ${
+              isAtEnd
+                ? 'opacity-40 cursor-not-allowed' 
+                : 'opacity-100 hover:scale-110 hover:shadow-purple-500/50 active:scale-95'
+            }`}
+            style={{ 
+              boxShadow: isAtEnd ? 'none' : '0 0 30px rgba(168, 85, 247, 0.4)' 
+            }}
+            aria-label="Next card"
+          >
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          {/* Carousel Container */}
+          <div className="carousel-container relative overflow-hidden touch-pan-y">
+            <div 
+              ref={carouselRef}
+              className="carousel-track flex gap-4 sm:gap-6 lg:gap-8 py-4"
+            >
+              {industries.map((industry, index) => (
+                <IndustryCard 
+                  key={`${industry.type}-${index}`}
+                  industry={industry} 
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -622,12 +611,12 @@ const AppShowcase = () => {
         <div className="text-center mt-6 sm:mt-8">
           <p className="text-gray-500 text-xs sm:text-sm flex items-center justify-center gap-2">
             <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            <span className="lg:hidden">Drag to explore</span>
+            <span className="lg:hidden">Use arrows to explore</span>
             <span className="hidden lg:inline">Scroll to explore</span>
             <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </p>
         </div>
