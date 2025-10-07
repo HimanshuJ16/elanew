@@ -5,10 +5,10 @@ import AppleCardsCarouselDemo from "./AppleCards";
 
 const ShowCase = () => {
   return (
-    <div className="relative w-full py-10">
+    <div className="relative w-full">
       <div className=" mx-auto px-5">
         <motion.h2 
-          className="text-4xl lg:text-5xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100/80 to-pink-100/80 leading-tight lg:mb-[-2rem]"
+          className="text-4xl lg:text-5xl font-black text-center text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100/80 to-pink-100/80 leading-tight lg:mb-[-4rem]"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -44,9 +44,9 @@ const data = [
     src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759309821/5_kcj99y.mp4",
   },
   {
-    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759310147/1_hacfcs.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211873/6_lhnkno.mp4",
   },
   {
-    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759211873/6_lhnkno.mp4",
+    src: "https://res.cloudinary.com/dexhq5lrp/video/upload/v1759310147/1_hacfcs.mp4",
   },
 ];
