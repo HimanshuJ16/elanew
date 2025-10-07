@@ -389,7 +389,7 @@ const ServiceShowcase = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative py-16 lg:py-24 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-gray-950 to-black"
+      className="relative py-2 lg:py-10 overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-gray-950 to-black"
     >
       {/* Animated background layers */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
