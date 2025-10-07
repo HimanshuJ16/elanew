@@ -547,13 +547,28 @@ const AppShowcase = () => {
           </p>
         </div>
 
-        {/* Carousel Container with Arrow Navigation */}
-        <div className="relative">
-          {/* Mobile Arrow Buttons */}
+        {/* Carousel Container */}
+        <div className="carousel-container relative overflow-hidden touch-pan-y">
+          <div 
+            ref={carouselRef}
+            className="carousel-track flex gap-4 sm:gap-6 lg:gap-8 py-4"
+          >
+            {industries.map((industry, index) => (
+              <IndustryCard 
+                key={`${industry.type}-${index}`}
+                industry={industry} 
+                index={index}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Arrow Buttons */}
+        <div className="lg:hidden flex justify-center items-center gap-8 mt-8">
           <button
             onClick={handlePrevCard}
             disabled={isAtStart}
-            className={`lg:hidden fixed left-4 sm:left-6 top-1/2 -translate-y-1/2 z-[100] w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-gray-800 to-gray-900 backdrop-blur-md border-2 ${
+            className={`w-14 h-14 bg-gradient-to-br from-gray-800 to-gray-900 backdrop-blur-md border-2 ${
               isAtStart ? 'border-gray-700/30' : 'border-purple-500/50'
             } rounded-full flex items-center justify-center transition-all duration-300 shadow-2xl ${
               isAtStart
@@ -565,7 +580,7 @@ const AppShowcase = () => {
             }}
             aria-label="Previous card"
           >
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
@@ -573,7 +588,7 @@ const AppShowcase = () => {
           <button
             onClick={handleNextCard}
             disabled={isAtEnd}
-            className={`lg:hidden fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-[100] w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-gray-800 to-gray-900 backdrop-blur-md border-2 ${
+            className={`w-14 h-14 bg-gradient-to-br from-gray-800 to-gray-900 backdrop-blur-md border-2 ${
               isAtEnd ? 'border-gray-700/30' : 'border-purple-500/50'
             } rounded-full flex items-center justify-center transition-all duration-300 shadow-2xl ${
               isAtEnd
@@ -585,26 +600,10 @@ const AppShowcase = () => {
             }}
             aria-label="Next card"
           >
-            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
             </svg>
           </button>
-
-          {/* Carousel Container */}
-          <div className="carousel-container relative overflow-hidden touch-pan-y">
-            <div 
-              ref={carouselRef}
-              className="carousel-track flex gap-4 sm:gap-6 lg:gap-8 py-4"
-            >
-              {industries.map((industry, index) => (
-                <IndustryCard 
-                  key={`${industry.type}-${index}`}
-                  industry={industry} 
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Interaction hint */}
