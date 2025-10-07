@@ -40,40 +40,40 @@ const counterItems = [
 
 const logoIconsList = [
   {
-    imgPath: "/images/logos/3.jpg",
+    imgPath: "/images/logos/3.png",
   },
   {
     imgPath: "/images/logos/6.png",
   },
   {
-    imgPath: "/images/logos/4.jpg",
+    imgPath: "/images/logos/4.png",
   },
   {
-    imgPath: "/images/logos/1.jpg",
+    imgPath: "/images/logos/1.png",
   },
   {
-    imgPath: "/images/logos/2.jpg",
+    imgPath: "/images/logos/2.png",
   },
   {
-    imgPath: "/images/logos/5.jpg",
+    imgPath: "/images/logos/5.png",
   },
   {
-    imgPath: "/images/logos/3.jpg",
+    imgPath: "/images/logos/3.png",
   },
   {
     imgPath: "/images/logos/6.png",
   },
   {
-    imgPath: "/images/logos/4.jpg",
+    imgPath: "/images/logos/4.png",
   },
   {
-    imgPath: "/images/logos/1.jpg",
+    imgPath: "/images/logos/1.png",
   },
   {
-    imgPath: "/images/logos/2.jpg",
+    imgPath: "/images/logos/2.png",
   },
   {
-    imgPath: "/images/logos/5.jpg",
+    imgPath: "/images/logos/5.png",
   },
 ];
 
