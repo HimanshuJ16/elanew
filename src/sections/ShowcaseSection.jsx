@@ -2,8 +2,9 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from "gsap/Draggable";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(Draggable);
+gsap.registerPlugin(Draggable, ScrollTrigger);
 
 // Icon components (keeping your existing icons)
 const IndustryIcon = ({ type }) => {
@@ -60,12 +61,17 @@ const AppShowcase = () => {
   const cardsRef = useRef([]);
   const autoplayTweenRef = useRef(null);
   const isDraggingRef = useRef(false);
+  const scrollTweenRef = useRef(null);
+  const draggableInstanceRef = useRef(null);
 
   useGSAP(() => {
     const carousel = carouselRef.current;
     const cards = cardsRef.current;
+    const section = sectionRef.current;
     
     if (!carousel || cards.length === 0) return;
+
+    const isMobile = window.innerWidth < 1024;
 
     // Calculate carousel boundaries
     const getMaxX = () => {
@@ -74,292 +80,319 @@ const AppShowcase = () => {
       return -(carouselWidth - containerWidth);
     };
 
-    // Create draggable carousel with improved animation handling
-    const draggableInstance = Draggable.create(carousel, {
-      type: "x",
-      bounds: {
-        minX: getMaxX(),
-        maxX: 0
-      },
-      inertia: true,
-      edgeResistance: 0.65,
-      throwProps: true,
-      snap: {
-        x: (endValue) => {
-          const cardWidth = cards[0].offsetWidth + (window.innerWidth < 640 ? 16 : 32);
-          return Math.round(endValue / cardWidth) * cardWidth;
+    // ============ DESKTOP: Horizontal Scroll on Wheel ============
+    if (!isMobile) {
+      // Kill autoplay for desktop
+      if (autoplayTweenRef.current) {
+        autoplayTweenRef.current.kill();
+        autoplayTweenRef.current = null;
+      }
+
+      // Create ScrollTrigger for horizontal scroll
+      scrollTweenRef.current = gsap.to(carousel, {
+        x: getMaxX(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "center center",
+          end: () => `+=${Math.abs(getMaxX()) * 2}`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
         }
-      },
-      onDragStart: function() {
-        isDraggingRef.current = true;
+      });
+
+      // Individual card hover interactions (desktop only)
+      cards.forEach((card) => {
+        const icon = card.querySelector('.industry-icon');
+        const badge = card.querySelector('.industry-badge');
+        const contentSections = card.querySelectorAll('.content-section');
+        const accentLine = card.querySelector('.accent-line');
+        const glowEffect = card.querySelector('.glow-effect');
+
+        const handleCardMouseEnter = () => {
+          gsap.to(card, {
+            y: -10,
+            scale: 1.05,
+            rotationY: 2,
+            duration: 0.5,
+            ease: "power2.out",
+            overwrite: "auto"
+          });
+          
+          if (icon) {
+            gsap.to(icon, {
+              rotation: 360,
+              scale: 1.2,
+              duration: 0.6,
+              ease: "back.out(2)",
+              overwrite: "auto"
+            });
+          }
+
+          if (badge) {
+            gsap.to(badge, {
+              scale: 1.1,
+              duration: 0.3,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+
+          if (contentSections.length) {
+            gsap.to(contentSections, {
+              x: 5,
+              backgroundColor: "rgba(31, 41, 55, 0.9)",
+              duration: 0.4,
+              stagger: 0.1,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+
+          if (accentLine) {
+            gsap.to(accentLine, {
+              scaleX: 1,
+              duration: 0.5,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+
+          if (glowEffect) {
+            gsap.to(glowEffect, {
+              opacity: 1,
+              scale: 1.5,
+              duration: 0.6,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+        };
         
-        // Kill autoplay from current position
+        const handleCardMouseLeave = () => {
+          gsap.to(card, {
+            y: 0,
+            scale: 1,
+            rotationY: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            overwrite: "auto"
+          });
+          
+          if (icon) {
+            gsap.to(icon, {
+              rotation: 0,
+              scale: 1,
+              duration: 0.5,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+
+          if (badge) {
+            gsap.to(badge, {
+              scale: 1,
+              duration: 0.3,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+
+          if (contentSections.length) {
+            gsap.to(contentSections, {
+              x: 0,
+              backgroundColor: "rgba(31, 41, 55, 0.5)",
+              duration: 0.4,
+              stagger: 0.05,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+
+          if (accentLine) {
+            gsap.to(accentLine, {
+              scaleX: 0,
+              duration: 0.5,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+
+          if (glowEffect) {
+            gsap.to(glowEffect, {
+              opacity: 0,
+              scale: 1,
+              duration: 0.6,
+              ease: "power2.out",
+              overwrite: "auto"
+            });
+          }
+        };
+
+        card.addEventListener('mouseenter', handleCardMouseEnter);
+        card.addEventListener('mouseleave', handleCardMouseLeave);
+      });
+    }
+
+    // ============ MOBILE: Draggable with Autoplay ============
+    if (isMobile) {
+      // Create draggable carousel with improved animation handling
+      draggableInstanceRef.current = Draggable.create(carousel, {
+        type: "x",
+        bounds: {
+          minX: getMaxX(),
+          maxX: 0
+        },
+        inertia: true,
+        edgeResistance: 0.65,
+        throwProps: true,
+        snap: {
+          x: (endValue) => {
+            const cardWidth = cards[0].offsetWidth + 16;
+            return Math.round(endValue / cardWidth) * cardWidth;
+          }
+        },
+        onDragStart: function() {
+          isDraggingRef.current = true;
+          
+          // Kill autoplay from current position
+          if (autoplayTweenRef.current) {
+            autoplayTweenRef.current.kill();
+          }
+          
+          // Animate cards on drag start from current state
+          gsap.to(cards, {
+            scale: 0.95,
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: "auto"
+          });
+        },
+        onDrag: function() {
+          // Progressive scale effect based on drag velocity
+          const velocity = Math.abs(this.getVelocity("x"));
+          const scaleFactor = gsap.utils.clamp(0.92, 0.98, 1 - velocity / 10000);
+          
+          gsap.to(cards, {
+            scale: scaleFactor,
+            duration: 0.2,
+            ease: "power1.out",
+            overwrite: "auto"
+          });
+        },
+        onDragEnd: function() {
+          isDraggingRef.current = false;
+          
+          // Restore cards with bounce effect
+          gsap.to(cards, {
+            scale: 1,
+            duration: 0.6,
+            ease: "back.out(1.4)",
+            overwrite: "auto"
+          });
+          
+          // Restart autoplay from current position
+          startAutoplay();
+        },
+        onThrowUpdate: function() {
+          // Keep cards slightly scaled during momentum scroll
+          gsap.to(cards, {
+            scale: 0.97,
+            duration: 0.2,
+            ease: "none",
+            overwrite: "auto"
+          });
+        },
+        onThrowComplete: function() {
+          // Final restoration after momentum stops
+          gsap.to(cards, {
+            scale: 1,
+            duration: 0.5,
+            ease: "back.out(1.2)",
+            overwrite: "auto"
+          });
+        }
+      })[0];
+
+      // Autoplay function for mobile
+      const startAutoplay = () => {
         if (autoplayTweenRef.current) {
           autoplayTweenRef.current.kill();
         }
         
-        // Animate cards on drag start from current state
-        gsap.to(cards, {
-          scale: 0.95,
-          duration: 0.3,
-          ease: "power2.out",
-          overwrite: "auto"
-        });
-      },
-      onDrag: function() {
-        // Progressive scale effect based on drag velocity
-        const velocity = Math.abs(this.getVelocity("x"));
-        const scaleFactor = gsap.utils.clamp(0.92, 0.98, 1 - velocity / 10000);
+        const currentX = gsap.getProperty(carousel, "x");
+        const targetX = getMaxX();
         
-        gsap.to(cards, {
-          scale: scaleFactor,
-          duration: 0.2,
-          ease: "power1.out",
-          overwrite: "auto"
-        });
-      },
-      onDragEnd: function() {
-        isDraggingRef.current = false;
+        // Calculate remaining distance and duration
+        const remainingDistance = Math.abs(targetX - currentX);
+        const totalDistance = Math.abs(targetX);
+        const baseDuration = 30;
+        const duration = (remainingDistance / totalDistance) * baseDuration;
         
-        // Restore cards with bounce effect
-        gsap.to(cards, {
-          scale: 1,
-          duration: 0.6,
-          ease: "back.out(1.4)",
-          overwrite: "auto"
-        });
-        
-        // Restart autoplay from current position
-        startAutoplay();
-      },
-      onThrowUpdate: function() {
-        // Keep cards slightly scaled during momentum scroll
-        gsap.to(cards, {
-          scale: 0.97,
-          duration: 0.2,
+        autoplayTweenRef.current = gsap.to(carousel, {
+          x: targetX,
+          duration: duration,
           ease: "none",
-          overwrite: "auto"
+          onComplete: () => {
+            // Reverse direction
+            autoplayTweenRef.current = gsap.to(carousel, {
+              x: 0,
+              duration: baseDuration,
+              ease: "none",
+              onComplete: startAutoplay
+            });
+          }
         });
-      },
-      onThrowComplete: function() {
-        // Final restoration after momentum stops
-        gsap.to(cards, {
-          scale: 1,
-          duration: 0.5,
-          ease: "back.out(1.2)",
-          overwrite: "auto"
-        });
-      }
-    })[0];
-
-    // Autoplay function that starts from current position
-    const startAutoplay = () => {
-      if (autoplayTweenRef.current) {
-        autoplayTweenRef.current.kill();
-      }
-      
-      const currentX = gsap.getProperty(carousel, "x");
-      const targetX = getMaxX();
-      
-      // Calculate remaining distance and duration
-      const remainingDistance = Math.abs(targetX - currentX);
-      const totalDistance = Math.abs(targetX);
-      const baseDuration = 30;
-      const duration = (remainingDistance / totalDistance) * baseDuration;
-      
-      autoplayTweenRef.current = gsap.to(carousel, {
-        x: targetX,
-        duration: duration,
-        ease: "none",
-        onComplete: () => {
-          // Reverse direction
-          autoplayTweenRef.current = gsap.to(carousel, {
-            x: 0,
-            duration: baseDuration,
-            ease: "none",
-            onComplete: startAutoplay
-          });
-        }
-      });
-    };
-
-    // Start initial autoplay
-    startAutoplay();
-
-    // Pause autoplay on hover (desktop only)
-    const handleMouseEnter = () => {
-      if (autoplayTweenRef.current && !isDraggingRef.current && window.innerWidth >= 1024) {
-        autoplayTweenRef.current.pause();
-      }
-    };
-    
-    const handleMouseLeave = () => {
-      if (autoplayTweenRef.current && !isDraggingRef.current && window.innerWidth >= 1024) {
-        autoplayTweenRef.current.play();
-      }
-    };
-
-    carousel.addEventListener("mouseenter", handleMouseEnter);
-    carousel.addEventListener("mouseleave", handleMouseLeave);
-
-    // Individual card hover interactions (desktop only)
-    cards.forEach((card) => {
-      const icon = card.querySelector('.industry-icon');
-      const badge = card.querySelector('.industry-badge');
-      const contentSections = card.querySelectorAll('.content-section');
-      const accentLine = card.querySelector('.accent-line');
-      const glowEffect = card.querySelector('.glow-effect');
-
-      const handleCardMouseEnter = () => {
-        if (window.innerWidth < 1024) return; // Disable hover effects on mobile/tablet
-
-        gsap.to(card, {
-          y: -10,
-          scale: 1.05,
-          rotationY: 2,
-          duration: 0.5,
-          ease: "power2.out",
-          overwrite: "auto"
-        });
-        
-        if (icon) {
-          gsap.to(icon, {
-            rotation: 360,
-            scale: 1.2,
-            duration: 0.6,
-            ease: "back.out(2)",
-            overwrite: "auto"
-          });
-        }
-
-        if (badge) {
-          gsap.to(badge, {
-            scale: 1.1,
-            duration: 0.3,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-
-        if (contentSections.length) {
-          gsap.to(contentSections, {
-            x: 5,
-            backgroundColor: "rgba(31, 41, 55, 0.9)",
-            duration: 0.4,
-            stagger: 0.1,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-
-        if (accentLine) {
-          gsap.to(accentLine, {
-            scaleX: 1,
-            duration: 0.5,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-
-        if (glowEffect) {
-          gsap.to(glowEffect, {
-            opacity: 1,
-            scale: 1.5,
-            duration: 0.6,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-      };
-      
-      const handleCardMouseLeave = () => {
-        if (window.innerWidth < 1024) return;
-
-        gsap.to(card, {
-          y: 0,
-          scale: 1,
-          rotationY: 0,
-          duration: 0.5,
-          ease: "power2.out",
-          overwrite: "auto"
-        });
-        
-        if (icon) {
-          gsap.to(icon, {
-            rotation: 0,
-            scale: 1,
-            duration: 0.5,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-
-        if (badge) {
-          gsap.to(badge, {
-            scale: 1,
-            duration: 0.3,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-
-        if (contentSections.length) {
-          gsap.to(contentSections, {
-            x: 0,
-            backgroundColor: "rgba(31, 41, 55, 0.5)",
-            duration: 0.4,
-            stagger: 0.05,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-
-        if (accentLine) {
-          gsap.to(accentLine, {
-            scaleX: 0,
-            duration: 0.5,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
-
-        if (glowEffect) {
-          gsap.to(glowEffect, {
-            opacity: 0,
-            scale: 1,
-            duration: 0.6,
-            ease: "power2.out",
-            overwrite: "auto"
-          });
-        }
       };
 
-      card.addEventListener('mouseenter', handleCardMouseEnter);
-      card.addEventListener('mouseleave', handleCardMouseLeave);
-    });
+      // Start initial autoplay on mobile
+      startAutoplay();
+    }
 
     // Update bounds on window resize
     const handleResize = () => {
-      draggableInstance.applyBounds({
-        minX: getMaxX(),
-        maxX: 0
-      });
+      const newIsMobile = window.innerWidth < 1024;
       
-      // Restart autoplay from new position after resize
-      if (autoplayTweenRef.current) {
-        startAutoplay();
+      // Add null check for scrollTweenRef
+      if (scrollTweenRef.current && scrollTweenRef.current.scrollTrigger) {
+        scrollTweenRef.current.scrollTrigger.refresh();
+      }
+      
+      // Add null check for draggableInstanceRef
+      if (draggableInstanceRef.current) {
+        draggableInstanceRef.current.applyBounds({
+          minX: getMaxX(),
+          maxX: 0
+        });
+      }
+      
+      // Restart autoplay on mobile after resize
+      if (newIsMobile && autoplayTweenRef.current) {
+        autoplayTweenRef.current.kill();
       }
     };
 
     window.addEventListener("resize", handleResize);
 
+    // Cleanup function with proper null checks
     return () => {
       window.removeEventListener("resize", handleResize);
-      carousel.removeEventListener("mouseenter", handleMouseEnter);
-      carousel.removeEventListener("mouseleave", handleMouseLeave);
-      draggableInstance.kill();
+      
+      // Check if draggableInstanceRef exists before killing
+      if (draggableInstanceRef.current) {
+        draggableInstanceRef.current.kill();
+      }
+      
+      // Check if autoplayTweenRef exists before killing
       if (autoplayTweenRef.current) {
         autoplayTweenRef.current.kill();
+      }
+      
+      // Check if scrollTweenRef and its scrollTrigger exist before killing
+      if (scrollTweenRef.current && scrollTweenRef.current.scrollTrigger) {
+        scrollTweenRef.current.scrollTrigger.kill();
       }
     };
   }, { scope: sectionRef });
@@ -547,7 +580,7 @@ const AppShowcase = () => {
     <section 
       id="work" 
       ref={sectionRef} 
-      className="app-showcase relative overflow-hidden bg-gradient-to-b from-black via-gray-950 to-black py-12 sm:py-16 md:py-20 lg:py-32"
+      className="app-showcase relative overflow-hidden bg-gradient-to-b from-black via-gray-950 to-black py-12 sm:py-16 md:py-20 lg:py-2"
     >
       {/* Static background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -560,9 +593,9 @@ const AppShowcase = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title section */}
-        <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-28">
+        <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-8">
           <h2 className="section-title text-4xl lg:text-5xl xl:text-7xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-white via-purple-100 to-pink-100 bg-clip-text text-transparent leading-tight px-4">
-            Industries We Serve
+            Industries We Serve
           </h2>
           <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed px-4 hidden md:block">
             Tailored solutions for diverse industries, driving growth through innovative marketing strategies.
@@ -583,20 +616,17 @@ const AppShowcase = () => {
               />
             ))}
           </div>
-          
-          {/* Gradient fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 lg:w-20 bg-gradient-to-r from-black to-transparent pointer-events-none z-20"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 lg:w-20 bg-gradient-to-l from-black to-transparent pointer-events-none z-20"></div>
         </div>
 
-        {/* Drag hint */}
+        {/* Interaction hint */}
         <div className="text-center mt-6 sm:mt-8">
           <p className="text-gray-500 text-xs sm:text-sm flex items-center justify-center gap-2">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
             </svg>
-            Drag to explore
-            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="lg:hidden">Drag to explore</span>
+            <span className="hidden lg:inline">Scroll to explore</span>
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </p>
