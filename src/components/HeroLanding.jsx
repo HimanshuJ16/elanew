@@ -83,7 +83,7 @@ function HeroLanding({ isLoadingComplete = true }) {
   }, [shouldAnimate]);
 
   return (
-    <section ref={containerRef} className="relative lg:mt-[4rem] h-[100vh] flex items-center justify-center overflow-hidden">
+    <section ref={containerRef} className="relative lg:mt-[4rem] lg:h-[100vh] h-[80vh] flex items-center justify-center overflow-hidden">
       <motion.div
         className="container relative z-10 px-6 mx-auto max-w-7xl"
         variants={containerAnimation}
