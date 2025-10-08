@@ -260,9 +260,9 @@ const AnimatedCounter = () => {
           ))}
         </div>
       </div>
-      <div className="lg:mt-10">
+      {/* <div className="lg:mt-10">
         <LogoShowcase/>
-      </div>
+      </div> */}
 
       <style jsx>{`
         .animate-float {

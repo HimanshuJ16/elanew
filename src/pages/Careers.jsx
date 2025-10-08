@@ -6,40 +6,32 @@ const jobCategories = [
     title: "Creative",
     positions: [
       {
-        title: "Graphic Designer",
+        title: "Content Creator Intern",
         department: "Creative",
         type: "Remote",
-        employment: "Contract",
-        pdfLink: "/founders_office_jd.html",
+        employment: "Full Time",
+        pdfLink: "/Content_Creator_Intern.pdf",
         applyLink: "https://yourcompany.com/apply/graphic-designer"
       },
-      {
-        title: "Video Editor",
-        department: "Creative",
-        type: "Remote", 
-        employment: "Contract",
-        pdfLink: "/founders_office_jd.html",
-        applyLink: "https://yourcompany.com/apply/video-editor"
-      }
     ]
   },
   {
     title: "Operations",
     positions: [
       {
-        title: "Meta Ads Specialist",
+        title: "Founder's Office Intern",
         department: "Operations",
         type: "Remote",
-        employment: "Part Time",
-        pdfLink: "/founders_office_jd.html",
+        employment: "Full Time",
+        pdfLink: "/Founder's_Office_JD.pdf",
         applyLink: "https://yourcompany.com/apply/meta-ads-specialist"
       },
       {
-        title: "Videographer",
+        title: "Media Buying Intern",
         department: "Operations",
-        type: "On ground",
-        employment: "Contract",
-        pdfLink: "/founders_office_jd.html",
+        type: "Hybrid",
+        employment: "Full Time",
+        pdfLink: "/Media_Buying_Intern.pdf",
         applyLink: "https://yourcompany.com/apply/videographer"
       }
     ]
@@ -371,16 +363,16 @@ const Careers = () => {
       </div>
 
       {/* Header Section */}
-      <section className="relative z-10 pt-8 pb-16 text-center">
+      <section className="relative z-10 pt-8 pb-16 lg:h-[20vh] text-center">
         <div className="container mx-auto px-4">
           <h1 
-            className="text-6xl md:text-8xl font-bold mb-8 bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent"
+            className="text-6xl md:text-8xl mb-8 absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 bg-clip-text text-transparent font-black italic z-999"
             style={{ transform: `translateY(${scrollY * 0.3}px)` }}
           >
             Careers
           </h1>
           
-          <button className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-black bg-yellow-400 rounded-full hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
+          {/* <button className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-black bg-yellow-400 rounded-full hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
             <span className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-orange-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <span className="relative z-10 flex items-center gap-2">
               Apply Now
@@ -388,7 +380,7 @@ const Careers = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </span>
-          </button>
+          </button> */}
         </div>
       </section>
 

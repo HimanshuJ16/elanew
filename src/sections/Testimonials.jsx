@@ -284,7 +284,7 @@ const Testimonials = () => {
     <motion.section 
       ref={sectionRef}
       id="testimonials" 
-      className="relative py-10 lg:py-16 overflow-hidden"
+      className="relative lg:py-16 overflow-hidden"
       // style={{ 
       //   background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)'
       // }}
@@ -310,7 +310,7 @@ const Testimonials = () => {
       />
 
       {/* Decorative elements */}
-      <motion.div 
+      {/* <motion.div 
         className="absolute top-16 left-8 w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
         animate={{ 
           y: [0, -8, 0],
@@ -334,7 +334,7 @@ const Testimonials = () => {
           ease: "easeInOut",
           delay: 1
         }}
-      />
+      /> */}
 
       <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-8">
         {/* Header */}

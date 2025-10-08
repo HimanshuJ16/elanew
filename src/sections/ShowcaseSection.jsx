@@ -13,42 +13,42 @@ const IndustryIcon = ({ type }) => {
       <img 
         src="/images/8.png" 
         alt="img8" 
-        className="w-10 h-10 invert"
+        className="w-10 h-10"
       />
     ),
     restaurant: (
       <img 
         src="/images/4.png" 
         alt="img8" 
-        className="w-7 h-7 lg:w-10 lg:h-10 invert"
+        className="w-7 h-7 lg:w-10 lg:h-10"
       />
     ),
     d2c: (
       <img 
         src="/images/6.png" 
         alt="img8" 
-        className="w-7 h-7 lg:w-10 lg:h-10 invert"
+        className="w-7 h-7 lg:w-10 lg:h-10"
       />
     ),
     legacy: (
       <img 
         src="/images/5.png" 
         alt="img8" 
-        className="w-7 h-7 lg:w-10 lg:h-10 invert"
+        className="w-7 h-7 lg:w-10 lg:h-10"
       />
     ),
     authors: (
       <img 
         src="/images/7.png" 
         alt="img8" 
-        className="w-7 h-7 lg:w-10 lg:h-10 invert"
+        className="w-7 h-7 lg:w-10 lg:h-10"
       />
     ),
     doctors: (
       <img 
         src="/images/3.png" 
         alt="img8" 
-        className="w-7 h-7 lg:w-10 lg:h-10 invert"
+        className="w-7 h-7 lg:w-10 lg:h-10"
       />
     ),
   };
@@ -607,7 +607,7 @@ const AppShowcase = () => {
         </div>
 
         {/* Interaction hint */}
-        <div className="text-center mt-6 sm:mt-8">
+        {/* <div className="text-center mt-6 sm:mt-8">
           <p className="text-gray-500 text-xs sm:text-sm flex items-center justify-center gap-2">
             <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -618,7 +618,7 @@ const AppShowcase = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </p>
-        </div>
+        </div> */}
       </div>
     </section>
   );

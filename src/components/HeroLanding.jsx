@@ -83,7 +83,7 @@ function HeroLanding({ isLoadingComplete = true }) {
   }, [shouldAnimate]);
 
   return (
-    <section ref={containerRef} className="relative lg:mt-[3rem] h-[100vh] flex items-center justify-center overflow-hidden">
+    <section ref={containerRef} className="relative lg:mt-[4rem] h-[100vh] flex items-center justify-center overflow-hidden">
       <motion.div
         className="container relative z-10 px-6 mx-auto max-w-7xl"
         variants={containerAnimation}
@@ -181,17 +181,25 @@ function HeroLanding({ isLoadingComplete = true }) {
             </h1>
           </motion.div>
 
-          <p className="text-sm md:text-md lg:text-[1rem] text-white/70 max-w-2xl leading-relaxed font-light mt-5">
+          <p className="text-sm md:text-md lg:text-[1rem] text-white/70 max-w-2xl leading-relaxed font-light mt-5 hidden lg:block">
             We drive results across the funnel, capturing attention, boosting recall, and converting revenue.{" "}
             <span className="text-white/90 font-medium bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text">
               We blend high-impact ads with authentic UGC and micro-campaigns to deliver strong ROAS, loyalty, and long-term growth.
             </span>
           </p>
 
+          <p className="text-sm md:text-md lg:text-[1rem] text-white/70 max-w-2xl leading-relaxed font-light mt-5 lg:hidden">
+            We drive results—capturing attention, boosting recall, and converting revenue.{" "}
+            <span className="text-white/90 font-medium bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text">
+              Blending powerful ads with real UGC for results that last.
+            </span>
+          </p>
+
+
           {/* Enhanced CTA Section */}
           <motion.div variants={buttonAnimation} className="flex flex-col sm:flex-row items-center gap-6">
             <a
-              href="#contact"
+              href="https://wa.me/+919097290982"
               aria-label="Book a call"
               className="group relative inline-flex h-12 lg:h-14 overflow-hidden rounded-2xl p-[1px] focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-300 hover:scale-105 active:scale-95"
             >
