@@ -43,7 +43,7 @@ const logoIconsList = [
     imgPath: "/images/logos/3.png",
   },
   {
-    imgPath: "/images/logos/6.png",
+    imgPath: "/images/logos/7.png",
   },
   {
     imgPath: "/images/logos/4.png",
@@ -61,7 +61,7 @@ const logoIconsList = [
     imgPath: "/images/logos/3.png",
   },
   {
-    imgPath: "/images/logos/6.png",
+    imgPath: "/images/logos/7.png",
   },
   {
     imgPath: "/images/logos/4.png",

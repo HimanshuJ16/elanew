@@ -10,7 +10,7 @@ const jobCategories = [
         department: "Creative",
         type: "Remote",
         employment: "Contract",
-        pdfLink: "/path/to/graphic-designer-jd.pdf",
+        pdfLink: "/founders_office_jd.html",
         applyLink: "https://yourcompany.com/apply/graphic-designer"
       },
       {
@@ -18,7 +18,7 @@ const jobCategories = [
         department: "Creative",
         type: "Remote", 
         employment: "Contract",
-        pdfLink: "/path/to/video-editor-jd.pdf",
+        pdfLink: "/founders_office_jd.html",
         applyLink: "https://yourcompany.com/apply/video-editor"
       }
     ]
@@ -31,7 +31,7 @@ const jobCategories = [
         department: "Operations",
         type: "Remote",
         employment: "Part Time",
-        pdfLink: "/path/to/meta-ads-specialist-jd.pdf",
+        pdfLink: "/founders_office_jd.html",
         applyLink: "https://yourcompany.com/apply/meta-ads-specialist"
       },
       {
@@ -39,7 +39,7 @@ const jobCategories = [
         department: "Operations",
         type: "On ground",
         employment: "Contract",
-        pdfLink: "/path/to/videographer-jd.pdf",
+        pdfLink: "/founders_office_jd.html",
         applyLink: "https://yourcompany.com/apply/videographer"
       }
     ]
