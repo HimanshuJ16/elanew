@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { CheckCircle2, Sparkles } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { CheckCircle2, Sparkles, ChevronRight, X } from 'lucide-react';
 
 const processCards = [
   {
@@ -105,6 +105,7 @@ const ProcessCard = ({ card, index, setActiveIndex, innerRef }) => {
   const viewRef = useRef(null);
   const isInView = useInView(viewRef, { margin: "-50% 0px -50% 0px" });
   const [isHovered, setIsHovered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (isInView) {
@@ -136,143 +137,232 @@ const ProcessCard = ({ card, index, setActiveIndex, innerRef }) => {
     },
   };
 
+  const handleCardClick = () => {
+    // Only toggle on mobile (screen width < 1024px)
+    if (window.innerWidth < 1024) {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
   return (
-    <motion.div
-      ref={(el) => {
-        viewRef.current = el;
-        if (innerRef) innerRef(el);
-      }}
-      className={`group relative mb-16 rounded-2xl border-2 backdrop-blur-sm ${card.borderColor}`}
-      initial={{ opacity: 0, y: 50, scale: 0.95 }}
-      whileInView={{ 
-        opacity: 1, 
-        y: 0, 
-        scale: 1,
-        transition: { 
-          duration: 0.7,
-          type: "spring",
-          stiffness: 100,
-          damping: 15
-        } 
-      }}
-      viewport={{ once: true, amount: 0.3 }}
-      whileHover={{ 
-        scale: 1.02,
-        transition: { duration: 0.3 }
-      }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
+    <>
       <motion.div
-        className={`absolute inset-0 bg-gradient-to-br ${card.bgColor} -z-10`}
-        animate={{
-          opacity: isHovered ? 0.4 : 0.2,
+        ref={(el) => {
+          viewRef.current = el;
+          if (innerRef) innerRef(el);
         }}
-        transition={{ duration: 0.4 }}
-      />
-
-      <div
-        className={`absolute inset-0 bg-gradient-to-br ${card.bgColor} -z-10 opacity-30`}
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0 100%)' }}
-      />
-
-      <motion.div
-        className={`absolute -inset-1 bg-gradient-to-r ${card.color} rounded-2xl blur-xl -z-20 opacity-0 group-hover:opacity-20`}
-        animate={{
-          opacity: isHovered ? 0.3 : 0,
+        className={`group relative mb-16 rounded-2xl border-2 backdrop-blur-sm ${card.borderColor} lg:cursor-default cursor-pointer`}
+        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+        whileInView={{ 
+          opacity: 1, 
+          y: 0, 
+          scale: 1,
+          transition: { 
+            duration: 0.7,
+            type: "spring",
+            stiffness: 100,
+            damping: 15
+          } 
         }}
-        transition={{ duration: 0.4 }}
-      />
-
-      <div className="relative p-8 md:p-10">
-        <motion.div 
-          className="mb-6 flex items-center gap-4"
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          <motion.div
-            className="relative"
-            animate={{
-              scale: isHovered ? 1.1 : 1,
-              rotate: isHovered ? [0, -10, 10, -10, 0] : 0,
-            }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="text-5xl drop-shadow-lg">{card.icon}</span>
-            {isHovered && (
-              <motion.div
-                className="absolute -top-1 -right-1"
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                exit={{ scale: 0, rotate: 180 }}
-              >
-                <Sparkles className="w-5 h-5 text-yellow-400" />
-              </motion.div>
-            )}
-          </motion.div>
-          
-          <div className="flex-1">
-            <motion.h3 
-              className={`bg-gradient-to-r ${card.color} bg-clip-text text-3xl font-bold text-transparent mb-1`}
-            >
-              {card.title}
-            </motion.h3>
-            <motion.div
-              className={`h-1 rounded-full bg-gradient-to-r ${card.color}`}
-              initial={{ width: 0 }}
-              whileInView={{ width: isHovered ? "100%" : "40%" }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            />
-          </div>
-        </motion.div>
-
-        <motion.p 
-          className="mb-8 text-neutral-300 text-md leading-relaxed hidden lg:block"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-        >
-          {card.subtitle}
-        </motion.p>
-
-        <motion.ul 
-          className="space-y-4"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          {card.benefits.map((benefit, i) => (
-            <motion.li 
-              key={i} 
-              className="flex items-start gap-4 group/item"
-              variants={itemVariants}
-            >
-              <motion.div
-                whileHover={{ scale: 1.2, rotate: 360 }}
-                transition={{ duration: 0.5 }}
-              >
-                <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-green-400 drop-shadow-lg" />
-              </motion.div>
-              <span className="text-neutral-200 text-base leading-relaxed group-hover/item:text-white transition-colors duration-300">
-                {benefit}
-              </span>
-            </motion.li>
-          ))}
-        </motion.ul>
-      </div>
-
-      <motion.div
-        className={`absolute top-5 right-5 lg:top-6 lg:right-6 w-6 h-6 lg:w-12 lg:h-12 rounded-full bg-gradient-to-br ${card.color} flex items-center justify-center font-bold text-white text-lg shadow-lg`}
-        initial={{ scale: 0, rotate: -180 }}
-        whileInView={{ scale: 1, rotate: 0 }}
-        transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.3 }}
-        whileHover={{ scale: 1.15, rotate: 360 }}
+        viewport={{ once: true, amount: 0.3 }}
+        whileHover={{ 
+          scale: 1.02,
+          transition: { duration: 0.3 }
+        }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        onClick={handleCardClick}
       >
-        {index + 1}
+        <motion.div
+          className={`absolute inset-0 bg-gradient-to-br ${card.bgColor} -z-10 rounded-2xl`}
+          animate={{
+            opacity: isHovered ? 0.4 : 0.2,
+          }}
+          transition={{ duration: 0.4 }}
+        />
+
+        <div
+          className={`absolute inset-0 bg-gradient-to-br ${card.bgColor} -z-10 opacity-30 rounded-2xl`}
+          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0 100%)' }}
+        />
+
+        <motion.div
+          className={`absolute -inset-1 bg-gradient-to-r ${card.color} rounded-2xl blur-xl -z-20 opacity-0 group-hover:opacity-20`}
+          animate={{
+            opacity: isHovered ? 0.3 : 0,
+          }}
+          transition={{ duration: 0.4 }}
+        />
+
+        <div className="relative p-8 md:p-10">
+          <motion.div 
+            className="mb-6 flex items-center gap-4"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <motion.div
+              className="relative"
+              animate={{
+                scale: isHovered ? 1.1 : 1,
+                rotate: isHovered ? [0, -10, 10, -10, 0] : 0,
+              }}
+              transition={{ duration: 0.5 }}
+            >
+              <span className="text-5xl drop-shadow-lg">{card.icon}</span>
+              {isHovered && (
+                <motion.div
+                  className="absolute -top-1 -right-1"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0, rotate: 180 }}
+                >
+                  <Sparkles className="w-5 h-5 text-yellow-400" />
+                </motion.div>
+              )}
+            </motion.div>
+            
+            <div className="flex-1">
+              <motion.h3 
+                className={`bg-gradient-to-r ${card.color} bg-clip-text text-3xl font-bold text-transparent mb-1`}
+              >
+                {card.title}
+              </motion.h3>
+              <motion.div
+                className={`h-1 rounded-full bg-gradient-to-r ${card.color}`}
+                initial={{ width: 0 }}
+                whileInView={{ width: isHovered ? "100%" : "40%" }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              />
+            </div>
+          </motion.div>
+
+          <motion.p 
+            className="mb-8 text-neutral-300 text-md leading-relaxed hidden lg:block"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            {card.subtitle}
+          </motion.p>
+
+          <motion.ul 
+            className="space-y-4"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            {card.benefits.map((benefit, i) => (
+              <motion.li 
+                key={i} 
+                className="flex items-start gap-4 group/item"
+                variants={itemVariants}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.2, rotate: 360 }}
+                  transition={{ duration: 0.5 }}
+                  className="hidden lg:block"
+                >
+                  <CheckCircle2 className="mt-1 h-6 w-6 flex-shrink-0 text-green-400 drop-shadow-lg" />
+                </motion.div>
+                
+                {/* Right arrow for mobile */}
+                <motion.div
+                  whileTap={{ scale: 0.9 }}
+                  className="lg:hidden block"
+                >
+                  <ChevronRight className="mt-1 h-6 w-6 flex-shrink-0 text-white drop-shadow-lg" />
+                </motion.div>
+
+                <span className="text-neutral-200 text-base leading-relaxed group-hover/item:text-white transition-colors duration-300">
+                  {benefit}
+                </span>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </div>
+
+        <motion.div
+          className={`absolute top-5 right-5 lg:top-6 lg:right-6 w-6 h-6 lg:w-12 lg:h-12 rounded-full bg-gradient-to-br ${card.color} flex items-center justify-center font-bold text-white text-lg shadow-lg`}
+          initial={{ scale: 0, rotate: -180 }}
+          whileInView={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.3 }}
+          whileHover={{ scale: 1.15, rotate: 360 }}
+        >
+          {index + 1}
+        </motion.div>
       </motion.div>
-    </motion.div>
+
+      {/* Mobile Modal */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsExpanded(false)}
+          >
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* Modal Content */}
+            <motion.div
+              className={`relative max-w-lg w-full max-h-[80vh] overflow-y-auto rounded-2xl border-2 ${card.borderColor} bg-neutral-900 p-6`}
+              initial={{ scale: 0.9, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 50 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setIsExpanded(false)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-neutral-800 hover:bg-neutral-700 transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+
+              {/* Modal Header */}
+              <div className="mb-6 flex items-center gap-4 pr-10">
+                <span className="text-4xl drop-shadow-lg">{card.icon}</span>
+                <div className="flex-1">
+                  <h3 className={`bg-gradient-to-r ${card.color} bg-clip-text text-2xl font-bold text-transparent mb-2`}>
+                    {card.title}
+                  </h3>
+                  <div className={`h-1 rounded-full bg-gradient-to-r ${card.color} w-full`} />
+                </div>
+              </div>
+
+              {/* Subtitle */}
+              <div className={`mb-6 p-4 rounded-xl bg-gradient-to-br ${card.bgColor} border ${card.borderColor}`}>
+                <p className="text-neutral-200 text-sm leading-relaxed">
+                  {card.subtitle}
+                </p>
+              </div>
+
+              {/* Benefits */}
+              <div className="space-y-4">
+                <h4 className="text-white font-semibold text-lg mb-3">Key Benefits</h4>
+                {card.benefits.map((benefit, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-1 h-5 w-5 flex-shrink-0 text-green-400" />
+                    <span className="text-neutral-200 text-sm leading-relaxed">
+                      {benefit}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -280,12 +370,11 @@ export default function Solutions() {
   const [activeIndex, setActiveIndex] = useState(0);
   const cardRefs = useRef({});
 
-  // Handle navigation click with scroll offset
   const handleNavClick = (index) => {
     setActiveIndex(index);
     const element = cardRefs.current[index];
     if (element) {
-      const yOffset = -100; // Adjust this value for spacing from top
+      const yOffset = -100;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       
       window.scrollTo({
@@ -326,18 +415,6 @@ export default function Solutions() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {/* <motion.div
-            className="inline-block mb-4"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 text-sm text-blue-300 font-medium">
-              <Sparkles className="w-4 h-4" />
-              Our Process
-            </span>
-          </motion.div> */}
-
           <motion.h2 
             className="mb-6 text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent"
             initial={{ opacity: 0, y: 20 }}
