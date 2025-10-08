@@ -68,7 +68,7 @@ const Footer = () => {
 
               {/* Email */}
               <a
-                href="mailto:info@elation.digital"
+                href="mailto:hi@elation.agency"
                 className="group flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:scale-[1.02]"
               >
                 <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300">

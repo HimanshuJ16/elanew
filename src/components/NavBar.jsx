@@ -40,7 +40,7 @@ const NavBar = () => {
   };
 
   const handleEmailClick = () => {
-    window.location.href = 'mailto:info@elation.digital';
+    window.location.href = 'mailto:hi@elation.agency';
     setIsDialogOpen(false);
   };
 
